@@ -9,7 +9,7 @@ public static class InfrastructureServices
 { 
     public static IServiceCollection AddInfrastructureServices(this IServiceCollection services, IConfiguration configuration)
     {
-        services.AddDbContext<WandererDbContext>(options => options.UseSqlServer(configuration.GetConnectionString("WandererDb")), 
+        services.AddDbContext<WandererDbContext>(options => options.UseSqlServer(configuration.GetConnectionString("WandererDBConnection")), 
             ServiceLifetime.Singleton);
 
         return services;

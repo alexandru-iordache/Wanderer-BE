@@ -1,6 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Wanderer.Domain.Models.Places;
 using Wanderer.Domain.Models.Users;
+using Wanderer.Infrastructure.Context.Configurations;
+using Wanderer.Infrastructure.Context.Configurations.Places;
+using Wanderer.Infrastructure.Context.Configurations.Users;
 
 namespace Wanderer.Infrastructure.Context;
 
@@ -15,11 +18,12 @@ public class WandererDbContext : DbContext
 
     public WandererDbContext(DbContextOptions<WandererDbContext> options) : base(options)
     {
-        this.Database.EnsureCreated();
+        Database.EnsureCreated();
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-
+        modelBuilder.ApplyConfiguration(new UserConfiguration());
+        modelBuilder.ApplyConfiguration(new CountryConfiguration());
     }
 }
