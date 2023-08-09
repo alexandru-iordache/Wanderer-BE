@@ -8,10 +8,12 @@ public class CountryConfiguration : IEntityTypeConfiguration<Country>
 {
     public void Configure(EntityTypeBuilder<Country> builder)
     {
+        builder.ToTable("COUNTRIES");
+
         builder.HasKey(x => x.Id);
 
         builder.Property(x => x.Id)
-            .HasColumnType("UNIQUEIDENTIFIER")
+            .HasColumnType("uniqueidentifier")
             .HasColumnName("ID");
 
         builder.HasIndex(x => x.Name)
@@ -21,5 +23,10 @@ public class CountryConfiguration : IEntityTypeConfiguration<Country>
             .IsRequired()
             .HasMaxLength(200)
             .HasColumnName("NAME");
+
+        builder.HasMany(x => x.Cities)
+            .WithOne(c => c.Country)
+            .HasForeignKey(c => c.CountryId)
+            .OnDelete(DeleteBehavior.Cascade);
     }
 }

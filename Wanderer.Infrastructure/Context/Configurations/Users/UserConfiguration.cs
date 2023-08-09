@@ -7,10 +7,12 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
 {
     public void Configure(EntityTypeBuilder<User> builder)
     {
+        builder.ToTable("USERS");
+
         builder.HasKey(x => x.Id);
 
         builder.Property(x => x.Id)
-            .HasColumnType("UNIQUEIDENTIFIER")
+            .HasColumnType("uniqueidentifier")
             .HasColumnName("ID");
 
         builder.Property(x => x.FirstName)
