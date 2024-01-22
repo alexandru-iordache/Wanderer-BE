@@ -12,6 +12,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Wanderer.Domain\Wanderer.Domain.csproj" />
+    <ProjectReference Include="..\Wanderer.Shared\Wanderer.Shared.csproj" />
   </ItemGroup>
 
 </Project>

@@ -14,6 +14,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Wanderer.Application\Wanderer.Application.csproj" />
     <ProjectReference Include="..\Wanderer.Domain\Wanderer.Domain.csproj" />
+    <ProjectReference Include="..\Wanderer.Shared\Wanderer.Shared.csproj" />
   </ItemGroup>
 
 </Project>

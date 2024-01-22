@@ -16,6 +16,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Wanderer.Application\Wanderer.Application.csproj" />
     <ProjectReference Include="..\Wanderer.Infrastructure\Wanderer.Infrastructure.csproj" />
   </ItemGroup>
 
