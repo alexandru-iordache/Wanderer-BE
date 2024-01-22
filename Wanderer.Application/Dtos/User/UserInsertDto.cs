@@ -9,4 +9,6 @@ public record UserInsertDto
     public string Address { get; init; }
 
     public string Email { get; init; }
+
+    public string Password { get; init; }
 }

@@ -1,14 +1,15 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
+using Wanderer.Infrastructure.Context;
 
-namespace Wanderer.Domain.Repositories.Generics;
+namespace Wanderer.Infrastructure.Repositories.Generics;
 
 public abstract class Repository<T> : IRepository<T> where T : class
 {
-    private readonly DbContext _dbContext;
+    private readonly WandererDbContext _dbContext;
     private readonly DbSet<T> _dbSet;
 
-    public Repository(DbContext dbContext)
+    protected Repository(WandererDbContext dbContext)
     {
         _dbContext = dbContext;
         _dbSet = _dbContext.Set<T>();
@@ -19,24 +20,24 @@ public abstract class Repository<T> : IRepository<T> where T : class
         return await _dbSet.FindAsync(id);
     }
 
-    public virtual async Task<IEnumerable<T>> GetAll(
+    public virtual async Task<IEnumerable<T>> Get(
         Expression<Func<T, bool>> filter = null,
         Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null,
         string includeProperties = "")
     {
         IQueryable<T> query = _dbSet;
 
-        if(filter != null)
+        if (filter != null)
         {
             query = query.Where(filter);
         }
 
-        foreach(var includeProperty in includeProperties.Split(',', StringSplitOptions.RemoveEmptyEntries))
+        foreach (var includeProperty in includeProperties.Split(',', StringSplitOptions.RemoveEmptyEntries))
         {
             query.Include(includeProperty);
         }
 
-        if(orderBy != null)
+        if (orderBy != null)
         {
             query = orderBy(query);
         }
@@ -61,10 +62,5 @@ public abstract class Repository<T> : IRepository<T> where T : class
     {
         _dbSet.Remove(entity);
         await _dbContext.SaveChangesAsync();
-    }
-
-    public virtual async Task<IEnumerable<T>> Find(Expression<Func<T, bool>> predicate)
-    {
-        return await _dbSet.Where(predicate).ToListAsync();
     }
 }
