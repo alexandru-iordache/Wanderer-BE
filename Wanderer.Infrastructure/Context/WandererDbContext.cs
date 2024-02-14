@@ -1,4 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Wanderer.Domain.Models.Locations;
+using Wanderer.Domain.Models.Locations.Places;
 using Wanderer.Domain.Models.Places;
 using Wanderer.Domain.Models.Users;
 using Wanderer.Infrastructure.Context.Configurations.Places;
@@ -23,5 +25,7 @@ public class WandererDbContext : DbContext
         modelBuilder.ApplyConfiguration(new UserConfiguration());
         modelBuilder.ApplyConfiguration(new CountryConfiguration());
         modelBuilder.ApplyConfiguration(new CityConfiguration());
+
+
     }
 }

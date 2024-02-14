@@ -20,13 +20,13 @@ public class UserService : IUserService
 
     public async Task<IEnumerable<UserDto>> Get()
     {
-        return (await _userRepository.Get()).Select(x => _userMapper.MapToDto(x)).ToList();
+        return (await _userRepository.GetAsync()).Select(x => _userMapper.MapToDto(x)).ToList();
     }
 
     public async Task<UserDto> InsertUser(UserInsertDto userInsertDto)
     {
         var userToInsert = _userMapper.MapToEntity(userInsertDto);
-        await _userRepository.Add(userToInsert);
+        await _userRepository.InsertAsync(userToInsert);
 
         return _userMapper.MapToDto(userToInsert);
     }

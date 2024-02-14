@@ -2,11 +2,11 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Wanderer.Application.Dtos.User;
-using Wanderer.Application.Mappers;
 using Wanderer.Application.Services;
 using Wanderer.Application.Services.Interfaces;
 using Wanderer.Domain.Models.Users;
 using Wanderer.Infrastructure.Context;
+using Wanderer.Infrastructure.Mappers;
 using Wanderer.Infrastructure.Repositories;
 using Wanderer.Infrastructure.Repositories.Interfaces;
 using Wanderer.Shared.Mappers;

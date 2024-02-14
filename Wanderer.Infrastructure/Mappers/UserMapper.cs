@@ -2,7 +2,7 @@
 using Wanderer.Domain.Models.Users;
 using Wanderer.Shared.Mappers;
 
-namespace Wanderer.Application.Mappers;
+namespace Wanderer.Infrastructure.Mappers;
 
 public class UserMapper : BaseMapper<User, UserDto, UserInsertDto>, IBaseMapper<User, UserDto, UserInsertDto>
 {
@@ -30,8 +30,7 @@ public class UserMapper : BaseMapper<User, UserDto, UserInsertDto>, IBaseMapper<
             insertDto.FirstName, 
             insertDto.LastName, 
             insertDto.Address, 
-            insertDto.Email, 
-            insertDto.Password
+            insertDto.Email
        );
     }
 }

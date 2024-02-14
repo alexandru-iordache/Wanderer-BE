@@ -36,10 +36,6 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
         builder.Property(x => x.Address)
             .HasMaxLength(1000)
             .HasColumnName("ADDRESS");
-
-        builder.Property(x => x.Password)
-            .HasMaxLength(1000)
-            .HasColumnName("PASSWORD_HASH");
     }
 }
 

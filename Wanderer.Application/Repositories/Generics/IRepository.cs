@@ -4,13 +4,13 @@ namespace Wanderer.Infrastructure.Repositories.Generics;
 
 public interface IRepository<T> where T : class
 {
-    Task Add(T entity);
+    Task InsertAsync(T entity);
 
-    Task Delete(T entity);
+    Task DeleteAsync(T entity);
 
-    Task<IEnumerable<T>> Get(Expression<Func<T, bool>> filter = null, Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null, string includeProperties = "");
+    Task<IEnumerable<T>> GetAsync(Expression<Func<T, bool>> filter = null, Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null, string includeProperties = "");
 
-    Task<T> GetById(Guid id);
+    Task<T> GetByIdAsync(Guid id);
 
-    Task Update(T entity);
+    Task UpdateAsync(T entity);
 }
