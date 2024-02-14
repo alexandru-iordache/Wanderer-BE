@@ -15,12 +15,12 @@ public abstract class Repository<T> : IRepository<T> where T : class
         _dbSet = _dbContext.Set<T>();
     }
 
-    public virtual async Task<T> GetById(Guid id)
+    public virtual async Task<T> GetByIdAsync(Guid id)
     {
         return await _dbSet.FindAsync(id);
     }
 
-    public virtual async Task<IEnumerable<T>> Get(
+    public virtual async Task<IEnumerable<T>> GetAsync(
         Expression<Func<T, bool>> filter = null,
         Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null,
         string includeProperties = "")
@@ -45,20 +45,20 @@ public abstract class Repository<T> : IRepository<T> where T : class
         return await query.ToListAsync();
     }
 
-    public virtual async Task Add(T entity)
+    public virtual async Task InsertAsync(T entity)
     {
         await _dbSet.AddAsync(entity);
         await _dbContext.SaveChangesAsync();
     }
 
-    public virtual async Task Update(T entity)
+    public virtual async Task UpdateAsync(T entity)
     {
         _dbSet.Attach(entity);
         _dbContext.Entry(entity).State = EntityState.Modified;
         await _dbContext.SaveChangesAsync();
     }
 
-    public virtual async Task Delete(T entity)
+    public virtual async Task DeleteAsync(T entity)
     {
         _dbSet.Remove(entity);
         await _dbContext.SaveChangesAsync();

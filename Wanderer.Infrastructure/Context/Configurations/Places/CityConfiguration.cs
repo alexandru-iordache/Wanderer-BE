@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Wanderer.Domain.Models.Places;
+using Wanderer.Domain.Models.Locations;
 
 namespace Wanderer.Infrastructure.Context.Configurations.Places;
 
