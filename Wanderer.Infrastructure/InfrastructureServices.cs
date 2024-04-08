@@ -5,6 +5,7 @@ using Wanderer.Application.Dtos.User;
 using Wanderer.Application.Services;
 using Wanderer.Application.Services.Interfaces;
 using Wanderer.Domain.Models.Users;
+using Wanderer.Infrastructure.Configurations;
 using Wanderer.Infrastructure.Context;
 using Wanderer.Infrastructure.Mappers;
 using Wanderer.Infrastructure.Repositories;
@@ -18,8 +19,13 @@ public static class InfrastructureServices
     public static IServiceCollection AddInfrastructureServices(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddDbContext<WandererDbContext>(options =>
-        options.UseSqlServer(configuration.GetConnectionString("WandererDBConnection")),
-                             ServiceLifetime.Singleton);
+            options.UseSqlServer(configuration.GetConnectionString("WandererDBConnection")),
+                                ServiceLifetime.Singleton);
+
+        services.Configure<FirebaseAuthenticationSettings>(options =>
+        {
+            configuration.GetSection("FirebaseAuthenticationSettings").Bind(options);
+        });
 
         #region Services
         services.AddScoped<IUserService, UserService>();

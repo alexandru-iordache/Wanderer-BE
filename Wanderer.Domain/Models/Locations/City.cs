@@ -12,11 +12,10 @@ public class City
 
     public Guid CountryId { get; private set; }
 
-    public City(Guid id, string name, Country country, Guid countryId)
+    public City(Guid id, string name, Guid countryId)
     {
         Id = id;
         Name = name;
-        Country = country;
         CountryId = countryId;
     }
 

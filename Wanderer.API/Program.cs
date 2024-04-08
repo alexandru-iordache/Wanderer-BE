@@ -1,5 +1,13 @@
+using FirebaseAdmin;
+using Google.Apis.Auth.OAuth2;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.IdentityModel.Tokens;
+using Wanderer.API;
+using Wanderer.API.Authentication;
 using Wanderer.Infrastructure;
-using Wanderer.Application;
+using Wanderer.Infrastructure.Configurations;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,7 +18,15 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.Services.AddHttpContextAccessor();
+
+builder.Services.AddPresentationServices(builder.Configuration);
 builder.Services.AddInfrastructureServices(builder.Configuration);
+
+FirebaseApp.Create(new AppOptions()
+{
+    Credential = GoogleCredential.FromFile("authentication.json")
+});
 
 var app = builder.Build();
 

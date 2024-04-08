@@ -1,4 +1,6 @@
-﻿using Wanderer.Domain.Models.Locations.Places;
+﻿using Wanderer.Domain.Enums;
+using Wanderer.Domain.Models.Locations.Places;
+using Wanderer.Domain.Models.Routes;
 
 namespace Wanderer.Domain.Models.Locations;
 
@@ -12,14 +14,21 @@ public abstract class Waypoint
 
     public decimal Rating { get; private set; }
 
+    public WaypointType WaypointType { get; private set; }
+
     public City City { get; private set; }
 
-    protected Waypoint(Guid id, string name, string description, decimal rating, City city)
+    public Guid CityId { get; private set; }
+
+    public ICollection<Route> Routes { get; private set; }
+
+    protected Waypoint(Guid id, string name, string description, decimal rating, WaypointType waypointType, Guid cityId)
     {
         Id = id;
         Name = name;
         Description = description;
         Rating = rating;
-        City = city;
+        WaypointType=waypointType;
+        CityId=cityId;
     }
 }

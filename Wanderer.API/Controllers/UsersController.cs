@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Wanderer.Application.Dtos.User;
 using Wanderer.Application.Services.Interfaces;
@@ -17,12 +17,14 @@ public class UsersController : ControllerBase
     }
 
     [HttpGet]
+    [Authorize(AuthenticationSchemes = "Firebase")]
     public async Task<IActionResult> GetAllUsers()
     {
         return Ok(await _userService.Get());
     }
 
     [HttpPost]
+    [Authorize]
     public async Task<IActionResult> PostUser([FromBody] UserInsertDto userInsertDto)
     {
         return Created(nameof(GetAllUsers), await _userService.InsertUser(userInsertDto));

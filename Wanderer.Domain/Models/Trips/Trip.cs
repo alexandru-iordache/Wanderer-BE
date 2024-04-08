@@ -8,7 +8,7 @@ public class Trip
 
     public string Title { get; private set; }
 
-    public List<InterCityRoute> InterCityRoutes { get; private set; }
+    public ICollection<InterCityRoute> InterCityRoutes { get; private set; }
 
-    public List<InterWaypointRoute> InterWaypointRoutes { get; private set; }
+    public ICollection<InterWaypointRoute> InterWaypointRoutes { get; private set; }
 }

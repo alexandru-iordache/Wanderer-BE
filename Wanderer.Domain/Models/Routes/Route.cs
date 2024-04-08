@@ -1,20 +1,34 @@
-﻿using Wanderer.Domain.Models.Trips;
+﻿using Wanderer.Domain.Enums;
+using Wanderer.Domain.Models.Trips;
 
 namespace Wanderer.Domain.Models.Routes;
 
-public abstract class Route<T> where T : class
+public abstract class Route
 {
-    public T StartLocation { get; private set; }
+    protected Route(Guid startLocationId, Guid endLocationId, DateTime startDate, DateTime endDate, int distance, Guid tripId, RouteType routeType)
+    {
+        StartLocationId=startLocationId;
+        EndLocationId=endLocationId;
+        StartDate=startDate;
+        EndDate=endDate;
+        Distance=distance;
+        TripId=tripId;
+        RouteType=routeType;
+    }
 
-    public T EndLocation { get; private set; }
+    public RouteType RouteType { get; set; }
 
-    public DateTime StartDate { get; private set; }
+    public Guid StartLocationId { get; set; }
 
-    public DateTime EndDate { get; private set; }
+    public Guid EndLocationId { get; set; }
 
-    public int Distance { get; private set; }
+    public DateTime StartDate { get; set; }
 
-    public Trip Trip { get; private set; }
+    public DateTime EndDate { get; set; }
 
-    public Guid TripId { get; private set; }
+    public int Distance { get; set; }
+
+    public Trip Trip { get; set; }
+
+    public Guid TripId { get; set; }
 }

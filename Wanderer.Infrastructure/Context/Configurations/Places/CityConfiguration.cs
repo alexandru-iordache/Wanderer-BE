@@ -20,11 +20,5 @@ public class CityConfiguration : IEntityTypeConfiguration<City>
             .IsRequired()
             .HasMaxLength(200)
             .HasColumnName("NAME");
-
-        builder.HasOne(x => x.Country)
-            .WithMany(c => c.Cities)
-            .HasForeignKey(x => x.CountryId)
-            .OnDelete(DeleteBehavior.Cascade)
-            .IsRequired();
     }
 }

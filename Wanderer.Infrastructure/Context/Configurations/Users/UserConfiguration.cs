@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Wanderer.Domain.Models.Users;
+using Wanderer.Shared.Constants;
 
 namespace Wanderer.Infrastructure.Context.Configurations.Users;
 public class UserConfiguration : IEntityTypeConfiguration<User>
@@ -15,14 +16,20 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
             .HasColumnType("uniqueidentifier")
             .HasColumnName("ID");
 
+        builder.Property(x => x.ProfileName)
+            .HasMaxLength(DBConstants.PROFILE_NAME_MAX_LENGTH)
+            .HasColumnName("PROFILE_NAME")
+            .IsRequired();
+            
+        builder.HasIndex(x => x.ProfileName)
+            .IsUnique();
+
         builder.Property(x => x.FirstName)
-            .IsRequired()
-            .HasMaxLength(500)
+            .HasMaxLength(DBConstants.MAX_LENGTH)
             .HasColumnName("FIRST_NAME");
 
         builder.Property(x => x.LastName)
-            .IsRequired()
-            .HasMaxLength(500)
+            .HasMaxLength(DBConstants.MAX_LENGTH)
             .HasColumnName("LAST_NAME");
 
         builder.HasIndex(x => x.Email)
@@ -30,12 +37,15 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
 
         builder.Property(x => x.Email)
             .IsRequired()
-            .HasMaxLength(500)
+            .HasMaxLength(DBConstants.MAX_LENGTH)
             .HasColumnName("EMAIL");
 
         builder.Property(x => x.Address)
-            .HasMaxLength(1000)
+            .HasMaxLength(DBConstants.ADDRESS_MAX_LENGTH)
             .HasColumnName("ADDRESS");
+
+        builder.Property(x => x.BirthDate)
+            .HasColumnName("BIRTH_DATE");
     }
 }
 
