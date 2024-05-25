@@ -2,9 +2,11 @@
 
 public class User
 {
-    public User(Guid id, string firstName, string lastName, string address, string email)
+    public User(Guid id, string externalId, string profileName, string firstName, string lastName, string address, string email)
     {
         Id = id;
+        ExternalId = externalId;
+        ProfileName = profileName;
         FirstName = firstName;
         LastName = lastName;
         Address = address;
@@ -12,6 +14,8 @@ public class User
     }
 
     public Guid Id { get; private set; }
+
+    public string ExternalId { get; private set; }
 
     public string ProfileName { get; private set; }
 

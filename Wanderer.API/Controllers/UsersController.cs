@@ -16,8 +16,21 @@ public class UsersController : ControllerBase
         _userService = userService;
     }
 
+    [HttpGet("byProfileName")]
+    public async Task<IActionResult> GetByProfileName([FromQuery] string profileName)
+    {
+        var userDto = await _userService.GetByProfileName(profileName);
+
+        if (userDto == null)
+        {
+            return NotFound();
+        }
+
+        return Ok(userDto);
+    }
+
     [HttpGet]
-    [Authorize(AuthenticationSchemes = "Firebase")]
+    [Authorize]
     public async Task<IActionResult> GetAllUsers()
     {
         return Ok(await _userService.Get());
@@ -25,8 +38,8 @@ public class UsersController : ControllerBase
 
     [HttpPost]
     [Authorize]
-    public async Task<IActionResult> PostUser([FromBody] UserInsertDto userInsertDto)
+    public async Task<IActionResult> RegisterUser([FromBody] UserInsertDto userInsertDto)
     {
-        return Created(nameof(GetAllUsers), await _userService.InsertUser(userInsertDto));
+        return Created(nameof(GetAllUsers), await _userService.RegisterUser(userInsertDto));
     }
 }

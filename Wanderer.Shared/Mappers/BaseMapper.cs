@@ -8,5 +8,5 @@ public abstract class BaseMapper<TEntity, TDto, TInsertDto> : IBaseMapper<TEntit
 
     public abstract TEntity MapToEntity(TDto dto);
 
-    public abstract TEntity MapToEntity(TInsertDto insertDto);
+    public abstract TEntity MapToEntity(TInsertDto insertDto, params object[] parameters);
 }

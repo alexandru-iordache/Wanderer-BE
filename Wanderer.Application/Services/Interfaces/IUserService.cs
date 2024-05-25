@@ -7,6 +7,6 @@ namespace Wanderer.Application.Services.Interfaces;
 public interface IUserService
 {
     Task<IEnumerable<UserDto>> Get();
-
-    Task<UserDto> InsertUser(UserInsertDto userInsertDto);
+    Task<UserDto?> GetByProfileName(string profileName);
+    Task<UserDto?> RegisterUser(UserInsertDto userInsertDto);
 }

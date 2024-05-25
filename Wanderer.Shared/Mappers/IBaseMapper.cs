@@ -9,5 +9,5 @@ public interface IBaseMapper<TEntity, TDto, TInsertDto>
 
     TEntity MapToEntity(TDto dto);
 
-    TEntity MapToEntity(TInsertDto insertDto);
+    TEntity MapToEntity(TInsertDto insertDto, params object[] parameters);
 }

@@ -16,6 +16,13 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
             .HasColumnType("uniqueidentifier")
             .HasColumnName("ID");
 
+        builder.Property(x => x.ExternalId)
+            .HasColumnName("EXTERNAL_ID")
+            .IsRequired();
+
+        builder.HasIndex(x => x.ExternalId)
+            .IsUnique();
+
         builder.Property(x => x.ProfileName)
             .HasMaxLength(DBConstants.PROFILE_NAME_MAX_LENGTH)
             .HasColumnName("PROFILE_NAME")

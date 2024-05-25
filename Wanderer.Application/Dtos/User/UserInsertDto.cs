@@ -2,13 +2,15 @@
 
 public record UserInsertDto
 {
-    public string FirstName { get; init; }
+    public string ProfileName { get; set; }
 
-    public string LastName { get; init; }
+    public string Email { get; set; }
 
-    public string Address { get; init; }
+    public string? FirstName { get; set; }
 
-    public string Email { get; init; }
+    public string? LastName { get; set; }
 
-    public string Password { get; init; }
+    public string? Address { get; set; }
+
+    public DateTime Birthday { get; set; }
 }

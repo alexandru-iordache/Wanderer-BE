@@ -23,10 +23,14 @@ public class UserMapper : BaseMapper<User, UserDto, UserInsertDto>, IBaseMapper<
         throw new NotImplementedException();
     }
 
-    public override User MapToEntity(UserInsertDto insertDto)
+    public override User MapToEntity(UserInsertDto insertDto, params object[] parameters)
     {
+        var externalUserId = parameters[0].ToString();
+
         return new User(
-            Guid.NewGuid(), 
+            Guid.NewGuid(),
+            externalUserId,
+            insertDto.ProfileName,
             insertDto.FirstName, 
             insertDto.LastName, 
             insertDto.Address, 
