@@ -1,4 +1,4 @@
-﻿namespace Wanderer.Application.Dtos.User;
+﻿namespace Wanderer.Application.Dtos.User.Response;
 
 public record UserDto
 {

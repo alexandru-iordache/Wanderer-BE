@@ -1,8 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Wanderer.Domain.Models.Locations;
-using Wanderer.Domain.Models.Locations.Places;
-using Wanderer.Domain.Models.Places;
 using Wanderer.Domain.Models.Users;
+using Wanderer.Infrastructure.Context.Configurations.Locations;
 using Wanderer.Infrastructure.Context.Configurations.Places;
 using Wanderer.Infrastructure.Context.Configurations.Users;
 
@@ -16,6 +15,10 @@ public class WandererDbContext : DbContext
 
     public DbSet<City> Cities { get; set; }
 
+    public DbSet<Waypoint> Waypoints { get; set; }
+
+    public DbSet<LatLngBound> Bounds { get; set; }
+
     public WandererDbContext(DbContextOptions<WandererDbContext> options) : base(options)
     {
     } 
@@ -25,7 +28,7 @@ public class WandererDbContext : DbContext
         modelBuilder.ApplyConfiguration(new UserConfiguration());
         modelBuilder.ApplyConfiguration(new CountryConfiguration());
         modelBuilder.ApplyConfiguration(new CityConfiguration());
-
-
+        modelBuilder.ApplyConfiguration(new WaypointConfiguration());
+        modelBuilder.ApplyConfiguration(new LatLngBoundConfiguration());
     }
 }

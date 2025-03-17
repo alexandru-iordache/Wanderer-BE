@@ -1,6 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Wanderer.Application.Dtos.User;
+﻿using Microsoft.AspNetCore.Mvc;
+using Wanderer.Application.Dtos.User.Request;
 using Wanderer.Application.Services.Interfaces;
 
 namespace Wanderer.API.Controllers;
@@ -23,7 +22,7 @@ public class UsersController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<IActionResult> PostUser([FromBody] UserInsertDto userInsertDto)
+    public async Task<IActionResult> PostUser([FromBody] AddUserDto userInsertDto)
     {
         return Created(nameof(GetAllUsers), await _userService.InsertUser(userInsertDto));
     }

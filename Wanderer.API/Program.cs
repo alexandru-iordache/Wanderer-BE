@@ -1,5 +1,4 @@
 using Wanderer.Infrastructure;
-using Wanderer.Application;
 
 var builder = WebApplication.CreateBuilder(args);
 

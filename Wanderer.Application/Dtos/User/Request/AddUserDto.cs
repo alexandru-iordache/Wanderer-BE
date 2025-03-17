@@ -1,6 +1,6 @@
-﻿namespace Wanderer.Application.Dtos.User;
+﻿namespace Wanderer.Application.Dtos.User.Request;
 
-public record UserInsertDto
+public record AddUserDto
 {
     public string FirstName { get; init; }
 
@@ -9,6 +9,4 @@ public record UserInsertDto
     public string Address { get; init; }
 
     public string Email { get; init; }
-
-    public string Password { get; init; }
 }

@@ -1,25 +1,20 @@
-﻿using Wanderer.Domain.Models.Locations.Places;
+﻿namespace Wanderer.Domain.Models.Locations;
 
-namespace Wanderer.Domain.Models.Locations;
-
-public abstract class Waypoint
+public class Waypoint
 {
-    public Guid Id { get; private set; }
+    public Guid Id { get; set; }
 
-    public string Name { get; private set; }
+    public required string PlaceId { get; set; }
 
-    public string Description { get; private set; }
+    public required string Name { get; set; }
 
-    public decimal Rating { get; private set; }
+    public string? Description { get; set; }
 
-    public City City { get; private set; }
+    public City City { get; set; }
 
-    protected Waypoint(Guid id, string name, string description, decimal rating, City city)
-    {
-        Id = id;
-        Name = name;
-        Description = description;
-        Rating = rating;
-        City = city;
-    }
+    public Guid CityId { get; set; }
+
+    // public ICollection<WaypointVisit> WaypointVisits { get; set; } = new List<WaypointVisit>();
+
+    public required string Type { get; set; }
 }

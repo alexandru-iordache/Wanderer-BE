@@ -1,4 +1,6 @@
-﻿namespace Wanderer.Domain.Models.Users;
+﻿using Wanderer.Domain.Models.Trips;
+
+namespace Wanderer.Domain.Models.Users;
 
 public class User
 {
@@ -20,4 +22,6 @@ public class User
     public string Address { get; private set; }
 
     public string Email { get; private set; }
+
+    public List<Trip> Trips { get; private set; }
 }

@@ -17,4 +17,8 @@
     <ProjectReference Include="..\Wanderer.Shared\Wanderer.Shared.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Migrations\" />
+  </ItemGroup>
+
 </Project>

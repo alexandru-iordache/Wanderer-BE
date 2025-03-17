@@ -1,7 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Wanderer.Application.Dtos.User;
+using Wanderer.Application.Dtos.User.Request;
+using Wanderer.Application.Dtos.User.Response;
 using Wanderer.Application.Services;
 using Wanderer.Application.Services.Interfaces;
 using Wanderer.Domain.Models.Users;
@@ -30,7 +31,7 @@ public static class InfrastructureServices
         #endregion
 
         #region Mappers
-        services.AddScoped<IBaseMapper<User, UserDto, UserInsertDto>, UserMapper>();
+        services.AddScoped<IBaseMapper<User, UserDto, AddUserDto>, UserMapper>();
         #endregion
 
         return services;
