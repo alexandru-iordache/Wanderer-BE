@@ -4,18 +4,17 @@ using Wanderer.Domain.Models.Users;
 
 namespace Wanderer.Domain.Models.Trips;
 
-[NotMapped]
 public class Trip
 {
-    public Guid Id { get; private set; }
+    public Guid Id { get; set; }
 
-    public string Title { get; private set; }
+    public required string Title { get; set; }
 
-    public DateTime StartDate { get; private set; }
+    public DateOnly StartDate { get; set; }
 
-    public User Owner { get; private set; }
+    public User Owner { get; set; }
 
-    public Guid OwnerId { get; private set; }
+    public Guid OwnerId { get; set; }
 
-    public ICollection<CityVisit> CityVisits { get; private set; }
+    public ICollection<CityVisit> CityVisits { get; set; }
 }

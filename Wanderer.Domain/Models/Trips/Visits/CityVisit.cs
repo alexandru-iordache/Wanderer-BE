@@ -3,18 +3,17 @@ using Wanderer.Domain.Models.Locations;
 
 namespace Wanderer.Domain.Models.Trips.Visits;
 
-[NotMapped]
 public class CityVisit
 {
     public Guid Id { get; set; }
 
-    public DateTime StartDate { get; set; }
+    public DateOnly StartDate { get; set; }
+
+    public int NumberOfNights { get; set; }
 
     public City City { get; set; }
 
     public Guid CityId { get; set; }
-
-    public int NumberOfNights { get; set; }
 
     public ICollection<DayVisit> Days { get; set; }
 

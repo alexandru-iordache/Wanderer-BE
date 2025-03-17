@@ -1,4 +1,6 @@
-﻿namespace Wanderer.Domain.Models.Locations;
+﻿using Wanderer.Domain.Models.Trips.Visits;
+
+namespace Wanderer.Domain.Models.Locations;
 
 public class Waypoint
 {
@@ -14,7 +16,7 @@ public class Waypoint
 
     public Guid CityId { get; set; }
 
-    // public ICollection<WaypointVisit> WaypointVisits { get; set; } = new List<WaypointVisit>();
+    public ICollection<WaypointVisit> WaypointVisits { get; set; } = new List<WaypointVisit>();
 
     public required string Type { get; set; }
 }

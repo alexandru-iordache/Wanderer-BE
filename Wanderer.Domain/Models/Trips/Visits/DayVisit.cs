@@ -3,10 +3,11 @@ using Wanderer.Domain.Models.Locations;
 
 namespace Wanderer.Domain.Models.Trips.Visits;
 
-[NotMapped]
 public class DayVisit
 {
     public Guid Id { get; set; }
+
+    public DateOnly Date { get; set; }
 
     public ICollection<WaypointVisit> WaypointVisits { get; set; }
 

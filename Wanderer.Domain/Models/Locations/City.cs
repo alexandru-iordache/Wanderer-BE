@@ -18,13 +18,9 @@ public class City
 
     public LatLngBound NorthEastBound { get; set; }
 
-    public Guid NorthEastBoundId { get; set; }
-
     public LatLngBound SouthWestBound { get; set; }
-
-    public Guid SouthWestBoundId { get; set; }
 
     public ICollection<Waypoint> Waypoints { get; set; } = new List<Waypoint>();
 
-    // public ICollection<CityVisit> CityVisits { get; set; } = new List<CityVisit>();
+    public ICollection<CityVisit> CityVisits { get; set; } = new List<CityVisit>();
 }

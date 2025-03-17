@@ -14,6 +14,7 @@ public class CountryConfiguration : IEntityTypeConfiguration<Country>
 
         builder.Property(x => x.Id)
             .HasColumnType("uniqueidentifier")
+            .HasDefaultValueSql("NEWID()")
             .HasColumnName("ID");
 
         builder.HasIndex(x => x.Name)

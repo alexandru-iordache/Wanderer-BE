@@ -3,7 +3,6 @@ using Wanderer.Domain.Models.Locations;
 
 namespace Wanderer.Domain.Models.Trips.Visits;
 
-[NotMapped]
 public class WaypointVisit
 {
     public Guid Id { get; set; }
