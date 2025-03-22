@@ -4,11 +4,11 @@ public record UserDto
 {
     public Guid Id { get; init; }
 
-    public string FirstName { get; init; }
+    public required string FirstName { get; init; }
 
-    public string LastName { get; init; }
+    public required string LastName { get; init; }
 
-    public string Address { get; init; }
+    public required string Address { get; init; }
 
-    public string Email { get; init; }
+    public required string Email { get; init; }
 }

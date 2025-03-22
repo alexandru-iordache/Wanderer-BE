@@ -12,6 +12,7 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
         builder.HasKey(x => x.Id);
 
         builder.Property(x => x.Id)
+            .HasDefaultValueSql("NEWID()")
             .HasColumnType("uniqueidentifier")
             .HasColumnName("ID");
 

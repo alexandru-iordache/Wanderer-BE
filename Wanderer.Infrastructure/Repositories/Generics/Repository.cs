@@ -7,7 +7,7 @@ namespace Wanderer.Infrastructure.Repositories.Generics;
 public abstract class Repository<T> : IRepository<T> where T : class
 {
     private readonly WandererDbContext _dbContext;
-    private readonly DbSet<T> _dbSet;
+    protected readonly DbSet<T> _dbSet;
 
     protected Repository(WandererDbContext dbContext)
     {
@@ -15,14 +15,14 @@ public abstract class Repository<T> : IRepository<T> where T : class
         _dbSet = _dbContext.Set<T>();
     }
 
-    public virtual async Task<T> GetByIdAsync(Guid id)
+    public virtual async Task<T?> GetByIdAsync(Guid id)
     {
         return await _dbSet.FindAsync(id);
     }
 
     public virtual async Task<IEnumerable<T>> GetAsync(
-        Expression<Func<T, bool>> filter = null,
-        Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null,
+        Expression<Func<T, bool>>? filter = null,
+        Func<IQueryable<T>, IOrderedQueryable<T>>? orderBy = null,
         string includeProperties = "")
     {
         IQueryable<T> query = _dbSet;

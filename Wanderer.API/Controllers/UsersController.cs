@@ -16,7 +16,7 @@ public class UsersController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetAllUsers()
+    public async Task<IActionResult> GetUsers()
     {
         return Ok(await _userService.Get());
     }
@@ -24,6 +24,6 @@ public class UsersController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> PostUser([FromBody] AddUserDto userInsertDto)
     {
-        return Created(nameof(GetAllUsers), await _userService.InsertUser(userInsertDto));
+        return Created(nameof(GetUsers), await _userService.InsertUser(userInsertDto));
     }
 }

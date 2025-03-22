@@ -1,34 +1,33 @@
-﻿using System.Linq.Expressions;
+﻿using AutoMapper;
 using Wanderer.Application.Dtos.User.Request;
 using Wanderer.Application.Dtos.User.Response;
+using Wanderer.Application.Repositories;
 using Wanderer.Application.Services.Interfaces;
 using Wanderer.Domain.Models.Users;
-using Wanderer.Infrastructure.Repositories.Interfaces;
-using Wanderer.Shared.Mappers;
 
-namespace Wanderer.Application.Services;
+namespace Wanderer.Infrastructure.Services;
 
 public class UserService : IUserService
 {
     private readonly IUserRepository _userRepository;
-    private readonly IBaseMapper<User, UserDto, AddUserDto> _userMapper;
+    private readonly IMapper _mapper;
 
-    public UserService(IUserRepository userRepository, IBaseMapper<User, UserDto, AddUserDto> userMapper)
+    public UserService(IUserRepository userRepository, IMapper mapper)
     {
         _userRepository = userRepository;
-        _userMapper = userMapper;
+        _mapper = mapper;
     }
 
     public async Task<IEnumerable<UserDto>> Get()
     {
-        return (await _userRepository.GetAsync()).Select(x => _userMapper.MapToDto(x)).ToList();
+        return (await _userRepository.GetAsync()).Select(_mapper.Map<UserDto>).ToList();
     }
 
     public async Task<UserDto> InsertUser(AddUserDto userInsertDto)
     {
-        var userToInsert = _userMapper.MapToEntity(userInsertDto);
-        await _userRepository.InsertAsync(userToInsert);
+        var user = _mapper.Map<User>(userInsertDto);
+        await _userRepository.InsertAsync(user);
 
-        return _userMapper.MapToDto(userToInsert);
+        return _mapper.Map<UserDto>(user);
     }
 }

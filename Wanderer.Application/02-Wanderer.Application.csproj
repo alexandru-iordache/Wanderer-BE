@@ -3,7 +3,8 @@
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>disable</Nullable>
+    <Nullable>enable</Nullable>
+	<RootNamespace>Wanderer.Application</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
@@ -11,8 +12,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Wanderer.Domain\Wanderer.Domain.csproj" />
-    <ProjectReference Include="..\Wanderer.Shared\Wanderer.Shared.csproj" />
+    <ProjectReference Include="..\Wanderer.Domain\04-Wanderer.Domain.csproj" />
+    <ProjectReference Include="..\Wanderer.Shared\05-Wanderer.Shared.csproj" />
   </ItemGroup>
 
 </Project>

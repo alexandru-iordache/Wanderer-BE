@@ -4,15 +4,6 @@ namespace Wanderer.Domain.Models.Users;
 
 public class User
 {
-    public User(Guid id, string firstName, string lastName, string address, string email)
-    {
-        Id = id;
-        FirstName = firstName;
-        LastName = lastName;
-        Address = address;
-        Email = email;
-    }
-
     public Guid Id { get; private set; }
 
     public string FirstName { get; private set; }
