@@ -7,5 +7,7 @@ public interface ITripService
 {
     Task<IEnumerable<TripDto>> Get();
 
+    Task<TripDto?> GetById(Guid id);
+
     Task<TripDto> InsertTrip(AddTripDto tripInsertDto);
 }

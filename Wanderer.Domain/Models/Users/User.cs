@@ -2,17 +2,13 @@
 
 namespace Wanderer.Domain.Models.Users;
 
-public class User
+public class User : BaseEntity
 {
-    public Guid Id { get; private set; }
+    public string ProfileName { get; set; }
 
-    public string FirstName { get; private set; }
+    public string Email { get; set; }
 
-    public string LastName { get; private set; }
+    public string? Address { get; set; }
 
-    public string Address { get; private set; }
-
-    public string Email { get; private set; }
-
-    public List<Trip> Trips { get; private set; }
+    public ICollection<Trip> Trips { get; set; }
 }

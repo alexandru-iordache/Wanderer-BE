@@ -21,6 +21,10 @@ public class CityVisitDto
 
     public required LatLngBoundDto SouthWestBound { get; set; }
 
+    public decimal Latitude;
+
+    public decimal Longitude;
+
     public int Order { get; set; }
 
     public IEnumerable<DayVisitDto> DayVisits { get; set; } = [];

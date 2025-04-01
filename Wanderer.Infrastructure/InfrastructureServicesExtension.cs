@@ -3,6 +3,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
 using Wanderer.Application.Repositories;
+using Wanderer.Application.Services;
 using Wanderer.Application.Services.Interfaces;
 using Wanderer.Infrastructure.Context;
 using Wanderer.Infrastructure.Repositories;
@@ -18,6 +19,8 @@ public static class InfrastructureServicesExtension
             options.UseSqlServer(configuration.GetConnectionString("WandererDBConnection")), ServiceLifetime.Singleton);
 
         #region Services
+        services.AddScoped<IHttpContextService, HttpContextService>();
+
         services.AddScoped<IUserService, UserService>();
         services.AddScoped<ITripService, TripService>();
         #endregion

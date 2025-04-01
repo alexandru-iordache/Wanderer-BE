@@ -4,10 +4,8 @@ using Wanderer.Domain.Models.Users;
 
 namespace Wanderer.Domain.Models.Trips;
 
-public class Trip
+public class Trip : BaseEntity
 {
-    public Guid Id { get; set; }
-
     public required string Title { get; set; }
 
     public DateOnly StartDate { get; set; }

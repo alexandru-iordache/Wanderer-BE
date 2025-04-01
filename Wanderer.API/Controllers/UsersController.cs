@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Wanderer.Application.Dtos.User.Request;
 using Wanderer.Application.Services.Interfaces;
 
@@ -15,6 +16,7 @@ public class UsersController : ControllerBase
         _userService = userService;
     }
 
+    [Authorize]
     [HttpGet]
     public async Task<IActionResult> GetUsers()
     {

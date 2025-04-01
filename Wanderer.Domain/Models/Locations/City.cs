@@ -2,10 +2,8 @@
 
 namespace Wanderer.Domain.Models.Locations;
 
-public class City
+public class City : BaseEntity
 {
-    public Guid Id { get; set; }
-
     public required string PlaceId { get; set; }
 
     public required string Name { get; set; }
@@ -19,6 +17,10 @@ public class City
     public LatLngBound NorthEastBound { get; set; }
 
     public LatLngBound SouthWestBound { get; set; }
+
+    public decimal Latitude { get; set; }
+
+    public decimal Longitude { get; set; }
 
     public ICollection<Waypoint> Waypoints { get; set; } = new List<Waypoint>();
 

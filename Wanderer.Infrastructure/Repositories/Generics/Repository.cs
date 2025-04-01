@@ -1,10 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
+using Wanderer.Domain.Models;
 using Wanderer.Infrastructure.Context;
 
 namespace Wanderer.Infrastructure.Repositories.Generics;
 
-public abstract class Repository<T> : IRepository<T> where T : class
+public abstract class Repository<T> : IRepository<T> where T : BaseEntity
 {
     private readonly WandererDbContext _dbContext;
     protected readonly DbSet<T> _dbSet;
@@ -17,7 +18,7 @@ public abstract class Repository<T> : IRepository<T> where T : class
 
     public virtual async Task<T?> GetByIdAsync(Guid id)
     {
-        return await _dbSet.FindAsync(id);
+        return await _dbSet.FirstOrDefaultAsync(x => x.Id.Equals(id));
     }
 
     public virtual async Task<IEnumerable<T>> GetAsync(

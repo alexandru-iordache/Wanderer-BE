@@ -13,6 +13,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "02-Wanderer.Application", "
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "05-Wanderer.Shared", "Wanderer.Shared\05-Wanderer.Shared.csproj", "{C0A637BF-7227-4F45-B6D7-A5023DE8FCC3}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "WandererApp", "WandererApp", "{7E1DC927-5E1C-4FA6-9B41-53BDB5AE1DEE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -42,6 +44,13 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{FD26CB61-359B-4CF7-A384-B6CBABA2462E} = {7E1DC927-5E1C-4FA6-9B41-53BDB5AE1DEE}
+		{E7AD7D6B-373E-4977-815F-5C37E0C63A5A} = {7E1DC927-5E1C-4FA6-9B41-53BDB5AE1DEE}
+		{4DE36D23-4EE9-4244-810F-BE6EF603CAAA} = {7E1DC927-5E1C-4FA6-9B41-53BDB5AE1DEE}
+		{D32FD5C8-DA2C-426E-B75B-1D1B64C4E8B9} = {7E1DC927-5E1C-4FA6-9B41-53BDB5AE1DEE}
+		{C0A637BF-7227-4F45-B6D7-A5023DE8FCC3} = {7E1DC927-5E1C-4FA6-9B41-53BDB5AE1DEE}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {838D8D37-6B0D-410A-B20D-D47FB9B1BA2C}

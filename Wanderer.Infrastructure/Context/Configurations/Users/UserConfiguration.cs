@@ -16,15 +16,10 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
             .HasColumnType("uniqueidentifier")
             .HasColumnName("ID");
 
-        builder.Property(x => x.FirstName)
+        builder.Property(x => x.ProfileName)
             .IsRequired()
             .HasMaxLength(500)
-            .HasColumnName("FIRST_NAME");
-
-        builder.Property(x => x.LastName)
-            .IsRequired()
-            .HasMaxLength(500)
-            .HasColumnName("LAST_NAME");
+            .HasColumnName("PROFILE_NAME");
 
         builder.HasIndex(x => x.Email)
                .IsUnique();

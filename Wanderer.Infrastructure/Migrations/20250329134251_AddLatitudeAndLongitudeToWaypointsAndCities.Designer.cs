@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Wanderer.Infrastructure.Context;
 
@@ -11,9 +12,11 @@ using Wanderer.Infrastructure.Context;
 namespace Wanderer.Infrastructure.Migrations
 {
     [DbContext(typeof(WandererDbContext))]
-    partial class WandererDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250329134251_AddLatitudeAndLongitudeToWaypointsAndCities")]
+    partial class AddLatitudeAndLongitudeToWaypointsAndCities
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -273,6 +276,7 @@ namespace Wanderer.Infrastructure.Migrations
                         .HasDefaultValueSql("NEWID()");
 
                     b.Property<string>("Address")
+                        .IsRequired()
                         .HasMaxLength(1000)
                         .HasColumnType("nvarchar(1000)")
                         .HasColumnName("ADDRESS");
@@ -283,11 +287,17 @@ namespace Wanderer.Infrastructure.Migrations
                         .HasColumnType("nvarchar(500)")
                         .HasColumnName("EMAIL");
 
-                    b.Property<string>("ProfileName")
+                    b.Property<string>("FirstName")
                         .IsRequired()
                         .HasMaxLength(500)
                         .HasColumnType("nvarchar(500)")
-                        .HasColumnName("PROFILE_NAME");
+                        .HasColumnName("FIRST_NAME");
+
+                    b.Property<string>("LastName")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)")
+                        .HasColumnName("LAST_NAME");
 
                     b.HasKey("Id");
 

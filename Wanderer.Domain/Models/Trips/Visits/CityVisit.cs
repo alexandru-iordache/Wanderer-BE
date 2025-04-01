@@ -3,10 +3,8 @@ using Wanderer.Domain.Models.Locations;
 
 namespace Wanderer.Domain.Models.Trips.Visits;
 
-public class CityVisit
+public class CityVisit : BaseEntity
 {
-    public Guid Id { get; set; }
-
     public DateOnly StartDate { get; set; }
 
     public int NumberOfNights { get; set; }

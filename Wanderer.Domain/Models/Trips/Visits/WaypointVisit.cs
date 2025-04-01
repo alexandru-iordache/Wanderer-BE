@@ -3,10 +3,8 @@ using Wanderer.Domain.Models.Locations;
 
 namespace Wanderer.Domain.Models.Trips.Visits;
 
-public class WaypointVisit
+public class WaypointVisit : BaseEntity
 {
-    public Guid Id { get; set; }
-
     public TimeOnly StartTime { get; set; }
 
     public TimeOnly EndTime { get; set; }

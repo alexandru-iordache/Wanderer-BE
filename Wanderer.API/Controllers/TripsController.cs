@@ -1,9 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Wanderer.Application.Dtos.Trip.Request;
 using Wanderer.Application.Services.Interfaces;
 
 namespace Wanderer.API.Controllers;
 
+[Authorize]
 [Route("api/[controller]")]
 [ApiController]
 public class TripsController : ControllerBase
@@ -21,8 +23,14 @@ public class TripsController : ControllerBase
         return Ok(await _tripService.Get());
     }
 
+    [HttpGet("{id}")]
+    public async Task<IActionResult> GetTripById(Guid id)
+    {
+        return Ok(await _tripService.GetById(id));
+    }
+
     [HttpPost]
-    public async Task <IActionResult> PostTrip([FromBody] AddTripDto addTripDto)
+    public async Task<IActionResult> PostTrip([FromBody] AddTripDto addTripDto)
     {
         return Created(nameof(GetTrips), await _tripService.InsertTrip(addTripDto));
     }

@@ -6,8 +6,4 @@
 		<RootNamespace>Wanderer.Shared</RootNamespace>
 	</PropertyGroup>
 
-	<ItemGroup>
-	  <Folder Include="Constants\" />
-	</ItemGroup>
-
 </Project>

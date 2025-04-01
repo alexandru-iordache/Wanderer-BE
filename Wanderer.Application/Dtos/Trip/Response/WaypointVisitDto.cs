@@ -8,6 +8,12 @@ public class WaypointVisitDto
 
     public required TimeOnly EndTime { get; set; }
 
+
+    public decimal Latitude { get; set; }
+
+    public decimal Longitude { get; set; }
+
+
     public required string PlaceId { get; set; }
 
     public required string Name { get; set; }

@@ -1,8 +1,9 @@
 ﻿using System.Linq.Expressions;
+using Wanderer.Domain.Models;
 
 namespace Wanderer.Infrastructure.Repositories.Generics;
 
-public interface IRepository<T> where T : class
+public interface IRepository<T> where T : BaseEntity
 {
     Task InsertAsync(T entity);
 
