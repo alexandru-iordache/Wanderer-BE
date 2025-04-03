@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Wanderer.API.Attributes;
 using Wanderer.Application.Dtos.User.Request;
 using Wanderer.Application.Services.Interfaces;
 
@@ -24,6 +25,7 @@ public class UsersController : ControllerBase
     }
 
     [HttpPost]
+    [Validate]
     public async Task<IActionResult> PostUser([FromBody] AddUserDto userInsertDto)
     {
         return Created(nameof(GetUsers), await _userService.InsertUser(userInsertDto));

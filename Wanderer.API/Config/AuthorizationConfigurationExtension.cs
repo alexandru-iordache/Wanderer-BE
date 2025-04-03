@@ -24,6 +24,7 @@ public static class AuthorizationConfigurationExtension
                         ValidAudience = audienceSection.Value,
                         ValidateLifetime = true
                     };
+                    options.RequireHttpsMetadata = false; // IMPORTANT remove this when productiom
                 });
 
         services.AddAuthorization();
