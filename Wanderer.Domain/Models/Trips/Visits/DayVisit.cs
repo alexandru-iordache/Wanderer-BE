@@ -1,4 +1,7 @@
-﻿namespace Wanderer.Domain.Models.Trips.Visits;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+
+namespace Wanderer.Domain.Models.Trips.Visits;
 
 public class DayVisit : BaseEntity
 {
@@ -9,4 +12,8 @@ public class DayVisit : BaseEntity
     public CityVisit CityVisit { get; set; }
 
     public Guid CityVisitId { get; set; }
+
+    [Column("DESCRIPTION")]
+    [MaxLength(1000)]
+    public string? Description { get; set; }
 }

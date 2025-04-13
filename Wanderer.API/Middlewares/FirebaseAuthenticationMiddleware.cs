@@ -37,13 +37,14 @@ public class FirebaseAuthenticationMiddleware
             {
                 var decodedToken = await FirebaseAuth.DefaultInstance.VerifyIdTokenAsync(token);
                 context.Items[HttpContextConstants.FirebaseTokenKey] = decodedToken;
-                await _next(context);
             }
             catch (Exception ex)
             {
                 context.Response.StatusCode = 401;
                 await context.Response.WriteAsync($"Token validation failed: {ex.Message}");
             }
+
+            await _next(context);
         }
     }
 }

@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Wanderer.Infrastructure.Context;
 
@@ -11,9 +12,11 @@ using Wanderer.Infrastructure.Context;
 namespace Wanderer.Infrastructure.Migrations
 {
     [DbContext(typeof(WandererDbContext))]
-    partial class WandererDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250405115402_AddFirebaseIdColumn")]
+    partial class AddFirebaseIdColumn
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -33,15 +36,15 @@ namespace Wanderer.Infrastructure.Migrations
                     b.Property<Guid>("CountryId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("DESCRIPTION");
+
                     b.Property<decimal>("Latitude")
-                        .HasPrecision(9, 6)
-                        .HasColumnType("decimal(9,6)")
-                        .HasColumnName("LATITUDE");
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<decimal>("Longitude")
-                        .HasPrecision(9, 6)
-                        .HasColumnType("decimal(9,6)")
-                        .HasColumnName("LONGITUDE");
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -82,6 +85,10 @@ namespace Wanderer.Infrastructure.Migrations
                         .HasColumnName("ID")
                         .HasDefaultValueSql("NEWID()");
 
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("DESCRIPTION");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(200)
@@ -107,15 +114,15 @@ namespace Wanderer.Infrastructure.Migrations
                     b.Property<Guid>("CityId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("DESCRIPTION");
+
                     b.Property<decimal>("Latitude")
-                        .HasPrecision(9, 6)
-                        .HasColumnType("decimal(9,6)")
-                        .HasColumnName("LATITUDE");
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<decimal>("Longitude")
-                        .HasPrecision(9, 6)
-                        .HasColumnType("decimal(9,6)")
-                        .HasColumnName("LONGITUDE");
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -183,11 +190,6 @@ namespace Wanderer.Infrastructure.Migrations
                     b.Property<Guid>("CityId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("Description")
-                        .HasMaxLength(1000)
-                        .HasColumnType("nvarchar(1000)")
-                        .HasColumnName("DESCRIPTION");
-
                     b.Property<int>("NumberOfNights")
                         .HasColumnType("int")
                         .HasColumnName("NO_OF_NIGHTS");
@@ -227,11 +229,6 @@ namespace Wanderer.Infrastructure.Migrations
                         .HasColumnType("date")
                         .HasColumnName("DATE");
 
-                    b.Property<string>("Description")
-                        .HasMaxLength(1000)
-                        .HasColumnType("nvarchar(1000)")
-                        .HasColumnName("DESCRIPTION");
-
                     b.HasKey("Id");
 
                     b.HasIndex("CityVisitId");
@@ -249,11 +246,6 @@ namespace Wanderer.Infrastructure.Migrations
 
                     b.Property<Guid>("DayVisitId")
                         .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Description")
-                        .HasMaxLength(1000)
-                        .HasColumnType("nvarchar(1000)")
-                        .HasColumnName("DESCRIPTION");
 
                     b.Property<TimeOnly>("EndTime")
                         .HasColumnType("time")
@@ -385,13 +377,13 @@ namespace Wanderer.Infrastructure.Migrations
                     b.HasOne("Wanderer.Domain.Models.Trips.Visits.DayVisit", "DayVisit")
                         .WithMany("WaypointVisits")
                         .HasForeignKey("DayVisitId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("Wanderer.Domain.Models.Locations.Waypoint", "Waypoint")
                         .WithMany("WaypointVisits")
                         .HasForeignKey("WaypointId")
-                        .OnDelete(DeleteBehavior.NoAction)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("DayVisit");

@@ -7,7 +7,7 @@ public class CityVisitDto
 {
     public Guid Id { get; set; }
 
-    public required DateOnly StartDate { get; set; }
+    public required DateTime StartDate { get; set; }
 
     public int NumberOfNights { get; set; }
 
@@ -21,9 +21,9 @@ public class CityVisitDto
 
     public required LatLngBoundDto SouthWestBound { get; set; }
 
-    public decimal Latitude;
+    public decimal Latitude { get; set; }
 
-    public decimal Longitude;
+    public decimal Longitude { get; set; }
 
     public int Order { get; set; }
 

@@ -4,15 +4,13 @@ public class WaypointVisitDto
 {
     public Guid Id { get; set; }
 
-    public required TimeOnly StartTime { get; set; }
+    public required string StartTime { get; set; }
 
-    public required TimeOnly EndTime { get; set; }
-
+    public required string EndTime { get; set; }
 
     public decimal Latitude { get; set; }
 
     public decimal Longitude { get; set; }
-
 
     public required string PlaceId { get; set; }
 

@@ -7,11 +7,13 @@ public interface IRepository<T> where T : BaseEntity
 {
     Task InsertAsync(T entity);
 
-    Task DeleteAsync(T entity);
+    void Delete(T entity);
 
     Task<IEnumerable<T>> GetAsync(Expression<Func<T, bool>>? filter = null, Func<IQueryable<T>, IOrderedQueryable<T>>? orderBy = null, string includeProperties = "");
 
-    Task<T?> GetByIdAsync(Guid id);
+    Task<T?> GetByIdAsync(Guid id, Expression<Func<T, bool>>? filter = null, string includeProperties = "");
 
-    Task UpdateAsync(T entity);
+    void Update(T entity);
+
+    Task SaveChangesAsync();
 }

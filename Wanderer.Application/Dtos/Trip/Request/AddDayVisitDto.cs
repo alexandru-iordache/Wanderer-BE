@@ -2,7 +2,7 @@
 
 public class AddDayVisitDto
 {
-    public required string Date { get; set; }
+    public required DateTime Date { get; set; }
 
     public IEnumerable<AddWaypointVisitDto> WaypointVisits { get; set; } = [];
 }

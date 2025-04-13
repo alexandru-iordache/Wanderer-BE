@@ -1,7 +1,7 @@
 ﻿using Wanderer.Application.Dtos.Trip.Request;
 using Wanderer.Application.Dtos.Trip.Response;
 
-namespace Wanderer.Application.Services.Interfaces;
+namespace Wanderer.Application.Services;
 
 public interface ITripService
 {
@@ -10,4 +10,6 @@ public interface ITripService
     Task<TripDto?> GetById(Guid id);
 
     Task<TripDto> InsertTrip(AddTripDto tripInsertDto);
+
+    Task<TripDto> UpdateTrip(Guid id, TripDto addTripDto);
 }

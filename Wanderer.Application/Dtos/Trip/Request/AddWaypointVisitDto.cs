@@ -8,11 +8,9 @@ public class AddWaypointVisitDto
 
     public required string PlaceId { get; set; }
 
-
     public decimal Latitude { get; set; }
 
     public decimal Longitude { get; set; }
-
 
     public required string Name { get; set; }
 

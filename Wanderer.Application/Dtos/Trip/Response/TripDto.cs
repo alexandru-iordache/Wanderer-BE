@@ -8,7 +8,7 @@ public class TripDto
 
     public required string Title { get; set; }
 
-    public required DateOnly StartDate { get; set; }
+    public required DateTime StartDate { get; set; }
 
     public IEnumerable<CityVisitDto> CityVisits { get; set; } = [];
 }

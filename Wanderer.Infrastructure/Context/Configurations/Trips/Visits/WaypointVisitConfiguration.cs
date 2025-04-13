@@ -28,13 +28,13 @@ public class WaypointVisitConfiguration : IEntityTypeConfiguration<WaypointVisit
         builder.HasOne(wv => wv.Waypoint)
                .WithMany(w => w.WaypointVisits)
                .HasForeignKey(wv => wv.WaypointId)
-               .OnDelete(DeleteBehavior.Cascade)
+               .OnDelete(DeleteBehavior.NoAction)
                .IsRequired();
 
         builder.HasOne(wv => wv.DayVisit)
                .WithMany(dv => dv.WaypointVisits)
                .HasForeignKey(wv => wv.DayVisitId)
-               .OnDelete(DeleteBehavior.NoAction)
+               .OnDelete(DeleteBehavior.Cascade)
                .IsRequired();
     }
 }

@@ -4,7 +4,6 @@ using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
 using Wanderer.Application.Repositories;
 using Wanderer.Application.Services;
-using Wanderer.Application.Services.Interfaces;
 using Wanderer.Infrastructure.Context;
 using Wanderer.Infrastructure.Repositories;
 using Wanderer.Infrastructure.Services;

@@ -9,7 +9,12 @@ public class UserProfile : Profile
 {
     public UserProfile()
     {
-        CreateMap<AddUserDto, UserModel>();
+        CreateMap<AddUserDto, UserModel>()
+            .ForMember(dest => dest.FirebaseId, opt => opt.MapFrom((src, dest, destMember, ctx) =>
+            {
+                var firebaseId = ctx.Items[nameof(UserModel.FirebaseId)];
+                return firebaseId != null ? (string)firebaseId : throw new InvalidOperationException("FirebaseId is not provided in the mapping context.");
+            }));
 
         CreateMap<UserModel, UserDto>();
     }

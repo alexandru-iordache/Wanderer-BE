@@ -4,7 +4,7 @@ namespace Wanderer.Application.Dtos.Trip.Request;
 
 public class AddCityVisitDto
 {
-    public required string StartDate { get; set; }
+    public required DateTime StartDate { get; set; }
 
     public int NumberOfNights { get; set; }
 

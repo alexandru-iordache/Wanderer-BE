@@ -16,9 +16,24 @@ public abstract class Repository<T> : IRepository<T> where T : BaseEntity
         _dbSet = _dbContext.Set<T>();
     }
 
-    public virtual async Task<T?> GetByIdAsync(Guid id)
+    public virtual async Task<T?> GetByIdAsync(
+        Guid id,
+        Expression<Func<T, bool>>? filter = null,
+        string includeProperties = "")
     {
-        return await _dbSet.FirstOrDefaultAsync(x => x.Id.Equals(id));
+        IQueryable<T> query = _dbSet;
+
+        if (filter != null)
+        {
+            query = query.Where(filter);
+        }
+
+        foreach (var includeProperty in includeProperties.Split(',', StringSplitOptions.RemoveEmptyEntries))
+        {
+            query = query.Include(includeProperty);
+        }
+
+        return await query.FirstOrDefaultAsync(x => x.Id.Equals(id));
     }
 
     public virtual async Task<IEnumerable<T>> GetAsync(
@@ -49,19 +64,21 @@ public abstract class Repository<T> : IRepository<T> where T : BaseEntity
     public virtual async Task InsertAsync(T entity)
     {
         await _dbSet.AddAsync(entity);
-        await _dbContext.SaveChangesAsync();
     }
 
-    public virtual async Task UpdateAsync(T entity)
+    public virtual void Update(T entity)
     {
         _dbSet.Attach(entity);
         _dbContext.Entry(entity).State = EntityState.Modified;
-        await _dbContext.SaveChangesAsync();
     }
 
-    public virtual async Task DeleteAsync(T entity)
+    public virtual void Delete(T entity)
     {
         _dbSet.Remove(entity);
+    }
+
+    public virtual async Task SaveChangesAsync()
+    {
         await _dbContext.SaveChangesAsync();
     }
 }

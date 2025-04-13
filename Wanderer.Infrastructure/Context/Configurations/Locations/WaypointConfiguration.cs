@@ -29,9 +29,6 @@ public class WaypointConfiguration : IEntityTypeConfiguration<Waypoint>
             .HasMaxLength(200)
             .HasColumnName("NAME");
 
-        builder.Property(x => x.Description)
-            .HasColumnName("DESCRIPTION");
-
         builder.Property(x => x.Type)
             .IsRequired()
             .HasMaxLength(50)

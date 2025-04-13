@@ -35,9 +35,6 @@ public class CityConfiguration : IEntityTypeConfiguration<City>
             .HasMaxLength(200)
             .HasColumnName("NAME");
 
-        builder.Property(x => x.Description)
-            .HasColumnName("DESCRIPTION");
-
         builder.HasOne(x => x.Country)
             .WithMany(c => c.Cities)
             .HasForeignKey(x => x.CountryId)

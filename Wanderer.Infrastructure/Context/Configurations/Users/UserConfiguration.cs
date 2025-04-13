@@ -21,6 +21,14 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
             .HasMaxLength(500)
             .HasColumnName("PROFILE_NAME");
 
+        builder.Property(x => x.FirebaseId)
+            .IsRequired()
+            .HasMaxLength(500)
+            .HasColumnName("FIREBASE_ID");
+
+        builder.HasIndex(x => x.FirebaseId)
+            .IsUnique();
+
         builder.HasIndex(x => x.Email)
                .IsUnique();
 

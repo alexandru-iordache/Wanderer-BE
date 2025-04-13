@@ -1,4 +1,6 @@
-﻿using Wanderer.Domain.Models.Trips.Visits;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.EntityFrameworkCore;
+using Wanderer.Domain.Models.Trips.Visits;
 
 namespace Wanderer.Domain.Models.Locations;
 
@@ -8,8 +10,6 @@ public class City : BaseEntity
 
     public required string Name { get; set; }
 
-    public string? Description { get; set; }
-
     public Country Country { get; set; }
 
     public Guid CountryId { get; set; }
@@ -18,8 +18,12 @@ public class City : BaseEntity
 
     public LatLngBound SouthWestBound { get; set; }
 
+    [Precision(9, 6)]
+    [Column("LATITUDE")]
     public decimal Latitude { get; set; }
 
+    [Precision(9, 6)]
+    [Column("LONGITUDE")]
     public decimal Longitude { get; set; }
 
     public ICollection<Waypoint> Waypoints { get; set; } = new List<Waypoint>();

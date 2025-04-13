@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Wanderer.API.Attributes;
 using Wanderer.Application.Dtos.User.Request;
-using Wanderer.Application.Services.Interfaces;
+using Wanderer.Application.Services;
 
 namespace Wanderer.API.Controllers;
 
@@ -10,24 +10,45 @@ namespace Wanderer.API.Controllers;
 [ApiController]
 public class UsersController : ControllerBase
 {
-    private readonly IUserService _userService;
+    private readonly IUserService userService;
+    private readonly IHttpContextService httpContextService;
 
-    public UsersController(IUserService userService)
+    public UsersController(IUserService userService, IHttpContextService httpContextService)
     {
-        _userService = userService;
+        this.userService = userService;
+        this.httpContextService = httpContextService;
     }
 
     [Authorize]
     [HttpGet]
     public async Task<IActionResult> GetUsers()
     {
-        return Ok(await _userService.Get());
+        return Ok(await userService.Get());
+    }
+
+    [Authorize]
+    [HttpGet("details")]
+    public async Task<IActionResult> GetUserDetails()
+    {
+        var firebaseId = httpContextService.GetFirebaseUserId();
+
+        var userDto = await userService.GetByFirebaseId(firebaseId);
+        if (userDto is not null)
+        {
+            return Ok(userDto);
+        }
+        else
+        {
+            return NotFound();
+        }
+
     }
 
     [HttpPost]
+    [Authorize]
     [Validate]
     public async Task<IActionResult> PostUser([FromBody] AddUserDto userInsertDto)
     {
-        return Created(nameof(GetUsers), await _userService.InsertUser(userInsertDto));
+        return Created(nameof(GetUsers), await userService.InsertUser(userInsertDto));
     }
 }

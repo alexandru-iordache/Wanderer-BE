@@ -1,7 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Wanderer.API.Config;
 
@@ -24,7 +22,7 @@ public static class AuthorizationConfigurationExtension
                         ValidAudience = audienceSection.Value,
                         ValidateLifetime = true
                     };
-                    options.RequireHttpsMetadata = false; // IMPORTANT remove this when productiom
+                    options.RequireHttpsMetadata = false; // IMPORTANT remove this when production
                 });
 
         services.AddAuthorization();

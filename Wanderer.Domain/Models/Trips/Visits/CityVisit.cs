@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using Wanderer.Domain.Models.Locations;
 
 namespace Wanderer.Domain.Models.Trips.Visits;
@@ -20,4 +21,8 @@ public class CityVisit : BaseEntity
     public Guid TripId { get; set; }
 
     public int Order { get; set; }
+
+    [Column("DESCRIPTION")]
+    [MaxLength(1000)]
+    public string? Description { get; set; }
 }
