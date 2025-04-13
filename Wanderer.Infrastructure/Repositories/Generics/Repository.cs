@@ -66,6 +66,11 @@ public abstract class Repository<T> : IRepository<T> where T : BaseEntity
         await _dbSet.AddAsync(entity);
     }
 
+    public virtual async Task InsertRangeAsync(IEnumerable<T> entities)
+    {
+        await _dbSet.AddRangeAsync(entities);
+    }
+
     public virtual void Update(T entity)
     {
         _dbSet.Attach(entity);

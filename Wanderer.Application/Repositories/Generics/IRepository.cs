@@ -7,6 +7,8 @@ public interface IRepository<T> where T : BaseEntity
 {
     Task InsertAsync(T entity);
 
+    Task InsertRangeAsync(IEnumerable<T> entities);
+
     void Delete(T entity);
 
     Task<IEnumerable<T>> GetAsync(Expression<Func<T, bool>>? filter = null, Func<IQueryable<T>, IOrderedQueryable<T>>? orderBy = null, string includeProperties = "");

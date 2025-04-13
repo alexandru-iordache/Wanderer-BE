@@ -11,5 +11,5 @@ public interface ITripService
 
     Task<TripDto> InsertTrip(AddTripDto tripInsertDto);
 
-    Task<TripDto> UpdateTrip(Guid id, TripDto addTripDto);
+    Task<TripDto> UpdateTrip(Guid id, TripDto tripDto);
 }
