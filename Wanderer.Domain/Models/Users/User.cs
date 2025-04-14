@@ -1,23 +1,16 @@
-﻿namespace Wanderer.Domain.Models.Users;
+﻿using Wanderer.Domain.Models.Trips;
 
-public class User
+namespace Wanderer.Domain.Models.Users;
+
+public class User : BaseEntity
 {
-    public User(Guid id, string firstName, string lastName, string address, string email)
-    {
-        Id = id;
-        FirstName = firstName;
-        LastName = lastName;
-        Address = address;
-        Email = email;
-    }
+    public string ProfileName { get; set; }
 
-    public Guid Id { get; private set; }
+    public string FirebaseId { get; set; }
 
-    public string FirstName { get; private set; }
+    public string Email { get; set; }
 
-    public string LastName { get; private set; }
+    public string? Address { get; set; }
 
-    public string Address { get; private set; }
-
-    public string Email { get; private set; }
+    public ICollection<Trip> Trips { get; set; }
 }

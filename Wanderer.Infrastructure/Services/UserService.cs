@@ -1,33 +1,45 @@
-﻿using System.Linq.Expressions;
-using Wanderer.Application.Dtos.User;
-using Wanderer.Application.Services.Interfaces;
+﻿using AutoMapper;
+using Microsoft.IdentityModel.Tokens;
+using Wanderer.Application.Dtos.User.Request;
+using Wanderer.Application.Dtos.User.Response;
+using Wanderer.Application.Repositories;
+using Wanderer.Application.Services;
 using Wanderer.Domain.Models.Users;
-using Wanderer.Infrastructure.Repositories.Interfaces;
-using Wanderer.Shared.Mappers;
 
-namespace Wanderer.Application.Services;
+namespace Wanderer.Infrastructure.Services;
 
 public class UserService : IUserService
 {
-    private readonly IUserRepository _userRepository;
-    private readonly IBaseMapper<User, UserDto, UserInsertDto> _userMapper;
+    private readonly IUserRepository userRepository;
+    private readonly IHttpContextService httpContextService;
+    private readonly IMapper mapper;
 
-    public UserService(IUserRepository userRepository, IBaseMapper<User, UserDto, UserInsertDto> userMapper)
+    public UserService(IUserRepository userRepository, IMapper mapper, IHttpContextService httpContextService)
     {
-        _userRepository = userRepository;
-        _userMapper = userMapper;
+        this.userRepository = userRepository;
+        this.mapper = mapper;
+        this.httpContextService = httpContextService;
     }
 
     public async Task<IEnumerable<UserDto>> Get()
     {
-        return (await _userRepository.GetAsync()).Select(x => _userMapper.MapToDto(x)).ToList();
+        return (await userRepository.GetAsync()).Select(mapper.Map<UserDto>).ToList();
     }
 
-    public async Task<UserDto> InsertUser(UserInsertDto userInsertDto)
+    public async Task<UserDto?> GetByFirebaseId(string firebaseId)
     {
-        var userToInsert = _userMapper.MapToEntity(userInsertDto);
-        await _userRepository.InsertAsync(userToInsert);
+        return await userRepository.GetAsync(x => x.FirebaseId == firebaseId)
+                                   .ContinueWith(t => t.Result.IsNullOrEmpty() ? null : mapper.Map<UserDto>(t.Result.First()));
+    }
 
-        return _userMapper.MapToDto(userToInsert);
+    public async Task<UserDto> InsertUser(AddUserDto userInsertDto)
+    {
+        var firebaseId = httpContextService.GetFirebaseUserId();
+
+        var user = mapper.Map<User>(userInsertDto, opt => opt.Items[nameof(User.FirebaseId)] = firebaseId);
+        await userRepository.InsertAsync(user);
+        await userRepository.SaveChangesAsync();
+
+        return mapper.Map<UserDto>(user);
     }
 }

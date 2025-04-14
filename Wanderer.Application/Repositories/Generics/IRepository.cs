@@ -1,16 +1,21 @@
 ﻿using System.Linq.Expressions;
+using Wanderer.Domain.Models;
 
 namespace Wanderer.Infrastructure.Repositories.Generics;
 
-public interface IRepository<T> where T : class
+public interface IRepository<T> where T : BaseEntity
 {
     Task InsertAsync(T entity);
 
-    Task DeleteAsync(T entity);
+    Task InsertRangeAsync(IEnumerable<T> entities);
 
-    Task<IEnumerable<T>> GetAsync(Expression<Func<T, bool>> filter = null, Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null, string includeProperties = "");
+    void Delete(T entity);
 
-    Task<T> GetByIdAsync(Guid id);
+    Task<IEnumerable<T>> GetAsync(Expression<Func<T, bool>>? filter = null, Func<IQueryable<T>, IOrderedQueryable<T>>? orderBy = null, string includeProperties = "");
 
-    Task UpdateAsync(T entity);
+    Task<T?> GetByIdAsync(Guid id, Expression<Func<T, bool>>? filter = null, string includeProperties = "");
+
+    void Update(T entity);
+
+    Task SaveChangesAsync();
 }

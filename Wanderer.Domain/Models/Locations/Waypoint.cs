@@ -1,25 +1,28 @@
-﻿using Wanderer.Domain.Models.Locations.Places;
+﻿using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations.Schema;
+using Wanderer.Domain.Models.Trips.Visits;
 
 namespace Wanderer.Domain.Models.Locations;
 
-public abstract class Waypoint
+public class Waypoint : BaseEntity
 {
-    public Guid Id { get; private set; }
+    public required string PlaceId { get; set; }
 
-    public string Name { get; private set; }
+    public required string Name { get; set; }
 
-    public string Description { get; private set; }
+    public City City { get; set; }
 
-    public decimal Rating { get; private set; }
+    public Guid CityId { get; set; }
 
-    public City City { get; private set; }
+    [Precision(9, 6)]
+    [Column("LATITUDE")]
+    public decimal Latitude { get; set; }
 
-    protected Waypoint(Guid id, string name, string description, decimal rating, City city)
-    {
-        Id = id;
-        Name = name;
-        Description = description;
-        Rating = rating;
-        City = city;
-    }
+    [Precision(9, 6)]
+    [Column("LONGITUDE")]
+    public decimal Longitude { get; set; }
+
+    public ICollection<WaypointVisit> WaypointVisits { get; set; } = new List<WaypointVisit>();
+
+    public required string Type { get; set; }
 }

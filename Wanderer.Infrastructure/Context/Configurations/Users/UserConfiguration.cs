@@ -12,18 +12,22 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
         builder.HasKey(x => x.Id);
 
         builder.Property(x => x.Id)
+            .HasDefaultValueSql("NEWID()")
             .HasColumnType("uniqueidentifier")
             .HasColumnName("ID");
 
-        builder.Property(x => x.FirstName)
+        builder.Property(x => x.ProfileName)
             .IsRequired()
             .HasMaxLength(500)
-            .HasColumnName("FIRST_NAME");
+            .HasColumnName("PROFILE_NAME");
 
-        builder.Property(x => x.LastName)
+        builder.Property(x => x.FirebaseId)
             .IsRequired()
             .HasMaxLength(500)
-            .HasColumnName("LAST_NAME");
+            .HasColumnName("FIREBASE_ID");
+
+        builder.HasIndex(x => x.FirebaseId)
+            .IsUnique();
 
         builder.HasIndex(x => x.Email)
                .IsUnique();

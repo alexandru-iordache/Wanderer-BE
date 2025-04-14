@@ -1,20 +1,8 @@
-﻿using Wanderer.Domain.Models.Locations;
-using Wanderer.Domain.Models.Locations.Places;
+﻿namespace Wanderer.Domain.Models.Locations;
 
-namespace Wanderer.Domain.Models.Places;
-
-public class Country
+public class Country : BaseEntity
 {
-    public Guid Id { get; private set; }
+    public required string Name { get; set; }
 
-    public string Name { get; private set; }
-
-    public ICollection<City> Cities { get; private set; }
-
-    public Country(Guid id, string name)
-    {
-        Id = id;
-        Name = name;
-    }
-
+    public ICollection<City> Cities { get; set; } = new List<City>();
 }
