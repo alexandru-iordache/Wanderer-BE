@@ -5,6 +5,7 @@ using System.Reflection;
 using Wanderer.Application.Repositories;
 using Wanderer.Application.Services;
 using Wanderer.Infrastructure.Context;
+using Wanderer.Infrastructure.Mappers;
 using Wanderer.Infrastructure.Repositories;
 using Wanderer.Infrastructure.Services;
 

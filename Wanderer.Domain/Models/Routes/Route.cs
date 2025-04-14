@@ -9,6 +9,8 @@ public abstract class Route
 {
     public Guid Id { get; private set; }
 
+    public T EndLocation { get; private set; }
+
     public DateTime StartDate { get; private set; }
 
     public DateTime EndDate { get; private set; }

@@ -9,7 +9,7 @@ public class InterCityRoute : Route
     public City StartLocation { get; private set; }
 
     public City EndLocation { get; private set; }
-
+    
     public InterCityRoute(Guid id, City startLocation, City endLocation, DateTime startDate, DateTime endDate, int distance, TransportType transportType, Trip trip)
         : base(id, startDate, endDate, distance, transportType, RouteType.InterCityRoute, trip)
     {

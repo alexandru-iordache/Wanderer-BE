@@ -12,7 +12,7 @@ public class InterWaypointRoute : Route
 
     public InterWaypointRoute(Guid id, Waypoint startLocation, Waypoint endLocation, DateTime startDate, DateTime endDate, int distance, TransportType transportType, Trip trip)
         : base(id, startDate, endDate, distance, transportType, RouteType.InterWaypointRoute, trip)
-    {
+{
         StartLocation = startLocation;
         EndLocation = endLocation;
     }
