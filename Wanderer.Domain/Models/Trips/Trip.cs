@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
+using Wanderer.Domain.Enums;
 using Wanderer.Domain.Models.Trips.Visits;
 using Wanderer.Domain.Models.Users;
 
@@ -14,5 +15,8 @@ public class Trip : BaseEntity
 
     public Guid OwnerId { get; set; }
 
-    public ICollection<CityVisit> CityVisits { get; set; }
+    public ICollection<CityVisit> CityVisits { get; set; } = [];
+
+    [Column("STATUS")]
+    public TripStatus Status { get; set; } = TripStatus.NotCompleted;
 }

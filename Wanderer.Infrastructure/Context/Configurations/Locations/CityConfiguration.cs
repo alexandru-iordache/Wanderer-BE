@@ -12,7 +12,7 @@ public class CityConfiguration : IEntityTypeConfiguration<City>
     {
         var converter = new ValueConverter<LatLngBound, string>(
             x => JsonConvert.SerializeObject(x),
-            x => JsonConvert.DeserializeObject<LatLngBound>(x)
+            x => JsonConvert.DeserializeObject<LatLngBound>(x)!
         );
 
         builder.ToTable("CITIES");

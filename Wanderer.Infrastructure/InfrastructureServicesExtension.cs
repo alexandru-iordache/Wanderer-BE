@@ -5,7 +5,6 @@ using System.Reflection;
 using Wanderer.Application.Repositories;
 using Wanderer.Application.Services;
 using Wanderer.Infrastructure.Context;
-using Wanderer.Infrastructure.Mappers;
 using Wanderer.Infrastructure.Repositories;
 using Wanderer.Infrastructure.Services;
 
@@ -18,11 +17,17 @@ public static class InfrastructureServicesExtension
         services.AddDbContext<WandererDbContext>(options =>
             options.UseSqlServer(configuration.GetConnectionString("WandererDBConnection")), ServiceLifetime.Singleton);
 
+        services.AddStackExchangeRedisCache(options =>
+        {
+            options.Configuration = configuration.GetConnectionString("WandererRedisConnection");
+        });
+
         #region Services
         services.AddScoped<IHttpContextService, HttpContextService>();
 
         services.AddScoped<IUserService, UserService>();
         services.AddScoped<ITripService, TripService>();
+        services.AddTransient<IUserStatsService, UserStatsService>();
         #endregion
 
         #region Repositories
