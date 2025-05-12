@@ -11,36 +11,50 @@ namespace Wanderer.API.Controllers;
 [ApiController]
 public class TripsController : ControllerBase
 {
-    private readonly ITripService _tripService;
+    private readonly ITripService tripService;
 
     public TripsController(ITripService tripService)
     {
-        _tripService = tripService;
+        this.tripService = tripService;
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetTrips()
+    public async Task<IActionResult> GetTrips(FilterOptionsDto filterOptionsDto)
     {
-        return Ok(await _tripService.Get());
+        return Ok(await tripService.Get(filterOptionsDto));
     }
 
     [HttpGet("{id}")]
     public async Task<IActionResult> GetTripById(Guid id)
     {
-        return Ok(await _tripService.GetById(id));
+        return Ok(await tripService.GetById(id));
     }
 
     [HttpPost]
     public async Task<IActionResult> PostTrip([FromBody] AddTripDto addTripDto)
     {
-        return Created(nameof(GetTrips), await _tripService.InsertTrip(addTripDto));
+        return Created(nameof(GetTrips), await tripService.InsertTrip(addTripDto));
+    }
+
+    [HttpPost("{id}/status")]
+    public async Task<IActionResult> ChangeTripsStatus(Guid id, [FromBody] ChangeTripStatusDto changeTripStatusDto)
+    {
+        var trip = await tripService.ChangeTripStatus(id, changeTripStatusDto);
+        return Ok(trip);
     }
 
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateTrip(Guid id, [FromBody] TripDto tripDto)
     {
-        var trip = await _tripService.UpdateTrip(id, tripDto);
+        var trip = await tripService.UpdateTrip(id, tripDto);
 
         return Ok(trip);
+    }
+
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> DeleteTrip(Guid id)
+    {
+        await tripService.DeleteTrip(id);
+        return NoContent();
     }
 }

@@ -1,6 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using Wanderer.Domain.Enums;
+using Wanderer.Domain.Models.Locations;
 using Wanderer.Domain.Models.Trips;
 
 namespace Wanderer.Infrastructure.Context.Configurations.Trips;
@@ -34,5 +37,19 @@ public class TripConfiguration : IEntityTypeConfiguration<Trip>
         builder.HasMany(t => t.CityVisits)
                .WithOne(cv => cv.Trip)
                .HasForeignKey(cv => cv.TripId);
+
+        var converter = new ValueConverter<TripStatus, int>(
+            x => (int)x,
+            x => (TripStatus)x
+        );
+
+        builder.Property(t => t.Status)
+               .IsRequired(true)
+               .HasConversion(converter)
+               .HasDefaultValue(TripStatus.NotCompleted);
+
+        builder.HasIndex(x => x.OwnerId);
+
+        builder.HasIndex(x => x.Status);
     }
 }

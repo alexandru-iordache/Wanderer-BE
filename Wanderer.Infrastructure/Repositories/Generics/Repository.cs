@@ -50,7 +50,7 @@ public abstract class Repository<T> : IRepository<T> where T : BaseEntity
 
         foreach (var includeProperty in includeProperties.Split(',', StringSplitOptions.RemoveEmptyEntries))
         {
-            query.Include(includeProperty);
+            query = query.Include(includeProperty);
         }
 
         if (orderBy != null)

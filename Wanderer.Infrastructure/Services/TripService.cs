@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
+using LinqKit;
 using Microsoft.Extensions.Logging;
-using System.Collections.Generic;
-using System.Linq;
 using Wanderer.Application.Dtos.Trip.Request;
 using Wanderer.Application.Dtos.Trip.Response;
 using Wanderer.Application.Mappers;
@@ -10,7 +9,6 @@ using Wanderer.Application.Repositories.Constants;
 using Wanderer.Application.Services;
 using Wanderer.Domain.Models.Locations;
 using Wanderer.Domain.Models.Trips;
-using Wanderer.Shared.Constants;
 
 namespace Wanderer.Infrastructure.Services;
 
@@ -22,6 +20,7 @@ public class TripService : ITripService
     private readonly ICityRepository cityRepository;
     private readonly IWaypointRepository waypointRepository;
     private readonly ICountryRepository countryRepository;
+    private readonly IUserStatsService userStatsService;
     private readonly ILogger<TripService> logger;
 
     public TripService(
@@ -31,6 +30,7 @@ public class TripService : ITripService
         ICityRepository cityRepository,
         IWaypointRepository waypointRepository,
         ICountryRepository countryRepository,
+        IUserStatsService userStatsService,
         ILogger<TripService> logger)
     {
         this.mapper = mapper;
@@ -39,12 +39,35 @@ public class TripService : ITripService
         this.cityRepository = cityRepository;
         this.waypointRepository = waypointRepository;
         this.countryRepository = countryRepository;
+        this.userStatsService = userStatsService; 
         this.logger = logger;
     }
 
-    public async Task<IEnumerable<TripDto>> Get()
+    public async Task<IEnumerable<TripDto>> Get(FilterOptionsDto filterOptionsDto)
     {
-        return (await tripRepository.GetAsync()).Select(mapper.Map<TripDto>).ToList();
+        var userId = httpContextService.GetUserId();
+
+        var filter = PredicateBuilder.New<Trip>(x => x.OwnerId.Equals(userId));
+
+        if (!filterOptionsDto.Status.Equals("All"))
+        {
+            filter = filter.And(x => x.Status.ToString().Equals(filterOptionsDto.Status));
+        }
+        if (filterOptionsDto.MinDate != null)
+        {
+            filter = filter.And(x => x.StartDate >= filterOptionsDto.MinDate);
+        }
+        if (filterOptionsDto.MaxDate != null)
+        {
+            filter = filter.And(x => x.StartDate <= filterOptionsDto.MaxDate);
+        }
+
+        var trips = await tripRepository.GetAsync(
+            filter: filter,
+            orderBy: filterOptionsDto.IsOrderedByDate ? x => x.OrderBy(t => t.StartDate) : null
+        );
+
+        return trips.Select(mapper.Map<TripDto>).ToList();
     }
 
     public async Task<TripDto?> GetById(Guid id)
@@ -68,6 +91,8 @@ public class TripService : ITripService
         await tripRepository.InsertAsync(trip);
         await tripRepository.SaveChangesAsync();
 
+        Task.Run(() => userStatsService.ComputeUserStats(userId, false));
+
         return mapper.Map<TripDto>(trip);
     }
 
@@ -82,11 +107,40 @@ public class TripService : ITripService
         var countryNames = tripDto.CityVisits.Select(x => x.Country).Distinct();
         var cityPlaceIds = tripDto.CityVisits.Select(x => x.PlaceId).Distinct();
         var waypointCityRelations = GetWaypointCityRelations(tripDto);
-        
+
         await BuildTrip(tripValueObject, countryNames, cityPlaceIds, waypointCityRelations);
 
         trip.UpdateTrip(tripValueObject);
         await tripRepository.SaveChangesAsync();
+
+        Task.Run(() => userStatsService.ComputeUserStats(userId, false));
+
+        return mapper.Map<TripDto>(trip);
+    }
+
+    public async Task DeleteTrip(Guid id)
+    {
+        var userId = httpContextService.GetUserId();
+        var trip = await tripRepository.GetByIdAsync(id, x => x.OwnerId.Equals(userId), IncludeConstants.TripConstants.IncludeAll)
+                ?? throw new KeyNotFoundException("Trip not found!");
+
+        tripRepository.Delete(trip);
+        await tripRepository.SaveChangesAsync();
+
+        Task.Run(() => userStatsService.ComputeUserStats(userId, false));
+    }
+
+    public async Task<TripDto> ChangeTripStatus(Guid id, ChangeTripStatusDto changeTripStatusDto) 
+    {
+        var userId = httpContextService.GetUserId();
+        var trip = await tripRepository.GetByIdAsync(id, x => x.OwnerId.Equals(userId), IncludeConstants.TripConstants.IncludeAll)
+                ?? throw new KeyNotFoundException("Trip not found!");
+
+        trip.ChangeTripStatus(changeTripStatusDto.IsCompleted);
+        await tripRepository.SaveChangesAsync();
+
+        // Compute the completed stats, since the not completed ones are the all existing in the db
+        Task.Run(() => userStatsService.ComputeUserStats(userId, true));
 
         return mapper.Map<TripDto>(trip);
     }
@@ -157,7 +211,7 @@ public class TripService : ITripService
 
         return cities;
     }
-    
+
     private async Task<IEnumerable<Waypoint>> GetWaypoints(Trip trip, Dictionary<string, string> waypointCityRelations, IEnumerable<City> cities)
     {
         var waypoints = await waypointRepository.GetByPlaceIdList(waypointCityRelations.Keys);

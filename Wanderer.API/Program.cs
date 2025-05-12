@@ -29,7 +29,7 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowSpecificOrigin",
         builder => builder.WithOrigins("http://localhost:4200")
-                          .WithMethods("POST", "PUT")
+                          .WithMethods("POST", "PUT", "DELETE")
                           .AllowAnyHeader());
 });
 
@@ -49,6 +49,7 @@ app.UseCors("AllowSpecificOrigin");
 app.UseAuthentication();
 app.UseAuthorization();
 
+app.UseMiddleware<ExceptionHandlerMiddleware>();
 app.UseMiddleware<FirebaseAuthenticationMiddleware>();
 
 app.MapControllers();

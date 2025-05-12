@@ -6,6 +6,7 @@ using Wanderer.Application.Services;
 
 namespace Wanderer.API.Controllers;
 
+[Authorize]
 [Route("api/[controller]")]
 [ApiController]
 public class UsersController : ControllerBase
@@ -19,14 +20,12 @@ public class UsersController : ControllerBase
         this.httpContextService = httpContextService;
     }
 
-    [Authorize]
     [HttpGet]
     public async Task<IActionResult> GetUsers()
     {
         return Ok(await userService.Get());
     }
 
-    [Authorize]
     [HttpGet("details")]
     public async Task<IActionResult> GetUserDetails()
     {
@@ -44,8 +43,13 @@ public class UsersController : ControllerBase
 
     }
 
+    [HttpGet("stats")]
+    public async Task<IActionResult> GetUserStats([FromQuery] bool isCompleted)
+    {
+        return Ok(await userService.GetUserStats(isCompleted)); 
+    }
+
     [HttpPost]
-    [Authorize]
     [Validate]
     public async Task<IActionResult> PostUser([FromBody] AddUserDto userInsertDto)
     {
