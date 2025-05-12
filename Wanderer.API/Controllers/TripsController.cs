@@ -19,9 +19,9 @@ public class TripsController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetTrips([FromQuery] bool isOrderedByDate)
+    public async Task<IActionResult> GetTrips(FilterOptionsDto filterOptionsDto)
     {
-        return Ok(await tripService.Get(isOrderedByDate));
+        return Ok(await tripService.Get(filterOptionsDto));
     }
 
     [HttpGet("{id}")]

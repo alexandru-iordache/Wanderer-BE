@@ -6,7 +6,7 @@ namespace Wanderer.Application.Services;
 public interface ITripService
 {
     
-    Task<IEnumerable<TripDto>> Get(bool isOrderedByDate);
+    Task<IEnumerable<TripDto>> Get(FilterOptionsDto filterOptionsDto);
 
     Task<TripDto?> GetById(Guid id);
 

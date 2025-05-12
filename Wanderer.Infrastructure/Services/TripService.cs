@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
+using LinqKit;
 using Microsoft.Extensions.Logging;
-using System.Collections.Generic;
-using System.Linq;
 using Wanderer.Application.Dtos.Trip.Request;
 using Wanderer.Application.Dtos.Trip.Response;
 using Wanderer.Application.Mappers;
@@ -10,7 +9,6 @@ using Wanderer.Application.Repositories.Constants;
 using Wanderer.Application.Services;
 using Wanderer.Domain.Models.Locations;
 using Wanderer.Domain.Models.Trips;
-using Wanderer.Shared.Constants;
 
 namespace Wanderer.Infrastructure.Services;
 
@@ -45,10 +43,29 @@ public class TripService : ITripService
         this.logger = logger;
     }
 
-    public async Task<IEnumerable<TripDto>> Get(bool isOrderedByDate)
+    public async Task<IEnumerable<TripDto>> Get(FilterOptionsDto filterOptionsDto)
     {
         var userId = httpContextService.GetUserId();
-        var trips = await tripRepository.GetAsync(filter: x => x.OwnerId.Equals(userId), orderBy: isOrderedByDate ? x => x.OrderBy(t => t.StartDate) : null);
+
+        var filter = PredicateBuilder.New<Trip>(x => x.OwnerId.Equals(userId));
+
+        if (!filterOptionsDto.Status.Equals("All"))
+        {
+            filter = filter.And(x => x.Status.ToString().Equals(filterOptionsDto.Status));
+        }
+        if (filterOptionsDto.MinDate != null)
+        {
+            filter = filter.And(x => x.StartDate >= filterOptionsDto.MinDate);
+        }
+        if (filterOptionsDto.MaxDate != null)
+        {
+            filter = filter.And(x => x.StartDate <= filterOptionsDto.MaxDate);
+        }
+
+        var trips = await tripRepository.GetAsync(
+            filter: filter,
+            orderBy: filterOptionsDto.IsOrderedByDate ? x => x.OrderBy(t => t.StartDate) : null
+        );
 
         return trips.Select(mapper.Map<TripDto>).ToList();
     }
