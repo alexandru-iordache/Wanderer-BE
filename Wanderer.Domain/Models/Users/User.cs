@@ -1,4 +1,6 @@
-﻿using Wanderer.Domain.Models.Trips;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+using Wanderer.Domain.Models.Locations;
+using Wanderer.Domain.Models.Trips;
 
 namespace Wanderer.Domain.Models.Users;
 
@@ -10,7 +12,12 @@ public class User : BaseEntity
 
     public string Email { get; set; }
 
-    public string? Address { get; set; }
+    public Guid? HomeCityId { get; set; }
+
+    public City? HomeCity { get; set; }
 
     public ICollection<Trip> Trips { get; set; }
+
+    [Column("AVATAR_URL")]
+    public string? AvatarUrl { get; set; }
 }

@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using Wanderer.Application.Dtos.Trip.Response;
-using Wanderer.Domain.Models.Trips;
+﻿using Wanderer.Domain.Models.Trips;
 
 namespace Wanderer.Application.Mappers;
 

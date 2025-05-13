@@ -30,16 +30,17 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
             .IsUnique();
 
         builder.HasIndex(x => x.Email)
-               .IsUnique();
+            .IsUnique();
 
         builder.Property(x => x.Email)
             .IsRequired()
             .HasMaxLength(500)
             .HasColumnName("EMAIL");
 
-        builder.Property(x => x.Address)
-            .HasMaxLength(1000)
-            .HasColumnName("ADDRESS");
+        builder.HasOne(x => x.HomeCity)
+            .WithMany(x => x.Users)
+            .HasForeignKey(x => x.HomeCityId)
+            .IsRequired(false);
     }
 }
 

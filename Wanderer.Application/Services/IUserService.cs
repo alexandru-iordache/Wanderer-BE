@@ -13,4 +13,6 @@ public interface IUserService
     Task<UserStatsDto> GetUserStats(bool isCompleted);
 
     Task<UserDto> InsertUser(AddUserDto userInsertDto);
+
+    Task<UserDto> UpdateUser(UpdateUserDto updateUserDto);
 }

@@ -55,4 +55,10 @@ public class UsersController : ControllerBase
     {
         return Created(nameof(GetUsers), await userService.InsertUser(userInsertDto));
     }
+
+    [HttpPut("{id}")]
+    public async Task<IActionResult> UpdateUser([FromBody] UpdateUserDto updateUserDto) 
+    {
+        return Ok(await userService.UpdateUser(updateUserDto));
+    }
 }

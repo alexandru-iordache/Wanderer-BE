@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 using Wanderer.Domain.Models.Trips.Visits;
+using Wanderer.Domain.Models.Users;
 
 namespace Wanderer.Domain.Models.Locations;
 
@@ -29,4 +30,6 @@ public class City : BaseEntity
     public ICollection<Waypoint> Waypoints { get; set; } = new List<Waypoint>();
 
     public ICollection<CityVisit> CityVisits { get; set; } = new List<CityVisit>();
+
+    public ICollection<User> Users { get; set; } = new List<User>();
 }
