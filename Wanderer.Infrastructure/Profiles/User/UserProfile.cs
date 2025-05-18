@@ -21,21 +21,46 @@ public class UserProfile : Profile
         CreateMap<UserModel, UserDto>()
             .ForMember(dest => dest.HomeCity, opt => opt.MapFrom((src, dest, destMember, ctx) =>
             {
-                if (src.HomeCity == null)
-                {
-                    return null;
-                }
-
-                return new HomeCityDto()
-                {
-                    PlaceId = src.HomeCity.PlaceId,
-                    City = src.HomeCity.Name,
-                    Country = src.HomeCity.Country.Name,
-                    Latitude = src.HomeCity.Latitude,
-                    Longitude = src.HomeCity.Longitude,
-                    NorthEastBound = new LatLngBoundDto() { Latitude = src.HomeCity.NorthEastBound.Latitude, Longitude = src.HomeCity.NorthEastBound.Longitude },
-                    SouthWestBound = new LatLngBoundDto() { Latitude = src.HomeCity.SouthWestBound.Latitude, Longitude = src.HomeCity.SouthWestBound.Longitude },
-                };
+                return MapHomeCity(src);
             }));
+
+        CreateMap<UserModel, UserProfileDto>()
+            .ForMember(dest => dest.HomeCity, opt => opt.MapFrom((src, dest, destMember, ctx) =>
+            {
+                return MapHomeCity(src);
+            }))
+            .ForMember(dest => dest.VisitedCities, opt => opt.MapFrom((src, dest, destMember, ctx) =>
+            {
+                var visitedCities = ctx.Items[nameof(UserProfileDto.VisitedCities)];
+                return visitedCities == null
+                    ? throw new InvalidOperationException("UserTrips is not provided in the mapping context.")
+                    : visitedCities;
+            }))
+            .ForMember(dest => dest.VisitedCountries, opt => opt.MapFrom((src, dest, destMember, ctx) =>
+            {
+                var visitedCountries = ctx.Items[nameof(UserProfileDto.VisitedCountries)];
+                return visitedCountries == null
+                    ? throw new InvalidOperationException("UserTrips is not provided in the mapping context.")
+                    : visitedCountries;
+            }));
+    }
+
+    private static HomeCityDto? MapHomeCity(UserModel src)
+    {
+        if (src.HomeCity == null)
+        {
+            return null;
+        }
+
+        return new HomeCityDto()
+        {
+            PlaceId = src.HomeCity.PlaceId,
+            City = src.HomeCity.Name,
+            Country = src.HomeCity.Country.Name,
+            Latitude = src.HomeCity.Latitude,
+            Longitude = src.HomeCity.Longitude,
+            NorthEastBound = new LatLngBoundDto() { Latitude = src.HomeCity.NorthEastBound.Latitude, Longitude = src.HomeCity.NorthEastBound.Longitude },
+            SouthWestBound = new LatLngBoundDto() { Latitude = src.HomeCity.SouthWestBound.Latitude, Longitude = src.HomeCity.SouthWestBound.Longitude },
+        };
     }
 }

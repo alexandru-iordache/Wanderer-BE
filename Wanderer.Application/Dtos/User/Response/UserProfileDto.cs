@@ -2,10 +2,8 @@
 
 namespace Wanderer.Application.Dtos.User.Response;
 
-public record UserDto
+public class UserProfileDto
 {
-    public Guid Id { get; init; }
-
     public required string ProfileName { get; init; }
 
     public string? ProfileDescription { get; init; }
@@ -14,5 +12,7 @@ public record UserDto
 
     public string? AvatarUrl { get; init; }
 
-    public required string Email { get; init; }
+    public IEnumerable<string> VisitedCities { get; init; } = new List<string>();
+
+    public IEnumerable<string> VisitedCountries { get; init; } = new List<string>();
 }

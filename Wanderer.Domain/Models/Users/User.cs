@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using Wanderer.Domain.Models.Locations;
 using Wanderer.Domain.Models.Trips;
 
@@ -11,6 +12,10 @@ public class User : BaseEntity
     public string FirebaseId { get; set; }
 
     public string Email { get; set; }
+
+    [Column("PROFILE_DESCRIPTION")]
+    [MaxLength(200)]
+    public string? ProfileDescription { get; set; }
 
     public Guid? HomeCityId { get; set; }
 

@@ -10,5 +10,6 @@ public static class UserExtensions
         user.ProfileName = userValueObject.ProfileName;
         user.AvatarUrl = userValueObject.AvatarUrl;
         user.HomeCityId = homeCityId;
+        user.ProfileDescription = userValueObject.ProfileDescription;
     }
 }

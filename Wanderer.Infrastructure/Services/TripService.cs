@@ -39,7 +39,7 @@ public class TripService : ITripService
         this.cityRepository = cityRepository;
         this.waypointRepository = waypointRepository;
         this.countryRepository = countryRepository;
-        this.userStatsService = userStatsService; 
+        this.userStatsService = userStatsService;
         this.logger = logger;
     }
 
@@ -130,7 +130,7 @@ public class TripService : ITripService
         Task.Run(() => userStatsService.ComputeUserStats(userId, false));
     }
 
-    public async Task<TripDto> ChangeTripStatus(Guid id, ChangeTripStatusDto changeTripStatusDto) 
+    public async Task<TripDto> ChangeTripStatus(Guid id, ChangeTripStatusDto changeTripStatusDto)
     {
         var userId = httpContextService.GetUserId();
         var trip = await tripRepository.GetByIdAsync(id, x => x.OwnerId.Equals(userId), IncludeConstants.TripConstants.IncludeAll)

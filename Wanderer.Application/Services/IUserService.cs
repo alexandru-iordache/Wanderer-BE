@@ -9,6 +9,8 @@ public interface IUserService
     Task<IEnumerable<UserDto>> Get();
     
     Task<UserDto?> GetByFirebaseId(string firebaseId);
+    
+    Task<UserProfileDto> GetUserProfile(Guid userId);
 
     Task<UserStatsDto> GetUserStats(bool isCompleted);
 

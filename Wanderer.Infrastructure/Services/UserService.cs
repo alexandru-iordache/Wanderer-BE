@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.IdentityModel.Tokens;
+using Wanderer.Application.Dtos.Trip.Request;
 using Wanderer.Application.Dtos.User.Common;
 using Wanderer.Application.Dtos.User.Request;
 using Wanderer.Application.Dtos.User.Response;
@@ -18,6 +19,7 @@ public class UserService : IUserService
     private readonly IUserStatsService userStatsService;
     private readonly ICityRepository cityRepository;
     private readonly ICountryRepository countryRepository;
+    private readonly ITripRepository tripRepository;
     private readonly IMapper mapper;
 
     public UserService(
@@ -26,7 +28,8 @@ public class UserService : IUserService
         IHttpContextService httpContextService,
         IUserStatsService userStatsService,
         ICityRepository cityRepository,
-        ICountryRepository countryRepository)
+        ICountryRepository countryRepository,
+        ITripRepository tripRepository)
     {
         this.userRepository = userRepository;
         this.mapper = mapper;
@@ -34,6 +37,7 @@ public class UserService : IUserService
         this.userStatsService = userStatsService;
         this.cityRepository = cityRepository;
         this.countryRepository = countryRepository;
+        this.tripRepository = tripRepository;
     }
 
     public async Task<IEnumerable<UserDto>> Get()
@@ -55,6 +59,25 @@ public class UserService : IUserService
         var userStats = await userStatsService.GetUserStats(userId, isCompleted);
 
         return userStats is not null ? userStats : new UserStatsDto();
+    }
+
+    public async Task<UserProfileDto> GetUserProfile(Guid userId)
+    {
+        var user = await userRepository.GetByIdAsync(userId, includeProperties: $"{nameof(User.HomeCity)},{nameof(User.HomeCity)}.{nameof(City.Country)}");
+        if (user == null)
+        {
+            throw new InvalidOperationException("User not found");
+        }
+
+        var userTrips = await tripRepository.GetByOwnerId(userId);
+        var visitedCities = userTrips.SelectMany(x => x.CityVisits).Select(x => x.City.Name).Distinct();
+        var visitedCountries = userTrips.SelectMany(x => x.CityVisits).Select(x => x.City.Country.Name).Distinct();
+
+        return mapper.Map<UserProfileDto>(user, opt =>
+        {
+            opt.Items[nameof(UserProfileDto.VisitedCities)] = visitedCities;
+            opt.Items[nameof(UserProfileDto.VisitedCountries)] = visitedCountries;
+        });
     }
 
     public async Task<UserDto> InsertUser(AddUserDto userInsertDto)

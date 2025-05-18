@@ -12,5 +12,7 @@ public record UpdateUserDto
 
     public string? AvatarUrl { get; init; }
 
+    public string? ProfileDescription { get; init; }
+
     public HomeCityDto? HomeCity { get; init; }
 }

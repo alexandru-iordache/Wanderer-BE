@@ -40,7 +40,12 @@ public class UsersController : ControllerBase
         {
             return NotFound();
         }
+    }
 
+    [HttpGet("{userId}/profile")]
+    public async Task<IActionResult> GetUserProfile(Guid userId) 
+    { 
+       return Ok(await userService.GetUserProfile(userId));
     }
 
     [HttpGet("stats")]
