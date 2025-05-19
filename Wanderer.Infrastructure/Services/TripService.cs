@@ -1,12 +1,14 @@
 ﻿using AutoMapper;
 using LinqKit;
 using Microsoft.Extensions.Logging;
+using Wanderer.Application.Dtos.Shared;
 using Wanderer.Application.Dtos.Trip.Request;
 using Wanderer.Application.Dtos.Trip.Response;
 using Wanderer.Application.Mappers;
 using Wanderer.Application.Repositories;
 using Wanderer.Application.Repositories.Constants;
 using Wanderer.Application.Services;
+using Wanderer.Domain.Enums;
 using Wanderer.Domain.Models.Locations;
 using Wanderer.Domain.Models.Trips;
 
@@ -43,23 +45,27 @@ public class TripService : ITripService
         this.logger = logger;
     }
 
-    public async Task<IEnumerable<TripDto>> Get(FilterOptionsDto filterOptionsDto)
+    public async Task<IEnumerable<TripDto>> GetUserTrips(Guid userId, FilterOptionsDto filterOptionsDto)
     {
-        var userId = httpContextService.GetUserId();
-
         var filter = PredicateBuilder.New<Trip>(x => x.OwnerId.Equals(userId));
 
         if (!filterOptionsDto.Status.Equals("All"))
         {
-            filter = filter.And(x => x.Status.ToString().Equals(filterOptionsDto.Status));
+            filter = filter.And(x => x.Status.Equals(Enum.Parse<TripStatus>(filterOptionsDto.Status)));
         }
         if (filterOptionsDto.MinDate != null)
         {
-            filter = filter.And(x => x.StartDate >= filterOptionsDto.MinDate);
+            var dateOnly = DateOnly.FromDateTime(filterOptionsDto.MinDate.Value);
+            filter = filter.And(x => x.StartDate >= dateOnly);
         }
         if (filterOptionsDto.MaxDate != null)
         {
-            filter = filter.And(x => x.StartDate <= filterOptionsDto.MaxDate);
+            var dateOnly = DateOnly.FromDateTime(filterOptionsDto.MaxDate.Value);
+            filter = filter.And(x => x.StartDate <= dateOnly);
+        }
+        if (filterOptionsDto.IsPublished != null)
+        {
+            filter = filter.And(x => x.IsPublished == filterOptionsDto.IsPublished);
         }
 
         var trips = await tripRepository.GetAsync(
@@ -130,19 +136,31 @@ public class TripService : ITripService
         Task.Run(() => userStatsService.ComputeUserStats(userId, false));
     }
 
-    public async Task<TripDto> ChangeTripStatus(Guid id, ChangeTripStatusDto changeTripStatusDto)
+    public async Task<EmptyResponse> CompleteTrip(Guid id)
     {
         var userId = httpContextService.GetUserId();
-        var trip = await tripRepository.GetByIdAsync(id, x => x.OwnerId.Equals(userId), IncludeConstants.TripConstants.IncludeAll)
+        var trip = await tripRepository.GetByIdAsync(id, x => x.OwnerId.Equals(userId))
                 ?? throw new KeyNotFoundException("Trip not found!");
 
-        trip.ChangeTripStatus(changeTripStatusDto.IsCompleted);
+        trip.CompleteTrip();
         await tripRepository.SaveChangesAsync();
 
         // Compute the completed stats, since the not completed ones are the all existing in the db
         Task.Run(() => userStatsService.ComputeUserStats(userId, true));
 
-        return mapper.Map<TripDto>(trip);
+        return new EmptyResponse();
+    }
+
+    public async Task<EmptyResponse> PublishTrip(Guid id)
+    {
+        var userId = httpContextService.GetUserId();
+        var trip = await tripRepository.GetByIdAsync(id, x => x.OwnerId.Equals(userId))
+                ?? throw new KeyNotFoundException("Trip not found!");
+        
+        trip.PublishTrip();
+        await tripRepository.SaveChangesAsync();
+        
+        return new EmptyResponse();
     }
 
     private async Task BuildTrip(Trip tripValueObject, IEnumerable<string> countryNames, IEnumerable<string> cityPlaceIds, Dictionary<string, string> waypointCityRelations)

@@ -15,4 +15,10 @@ public class UserProfileDto
     public IEnumerable<string> VisitedCities { get; init; } = new List<string>();
 
     public IEnumerable<string> VisitedCountries { get; init; } = new List<string>();
+
+    public int FollowersCount { get; init; }
+
+    public int FollowingCount { get; init; }
+
+    public bool IsFollowing { get; init; }
 }

@@ -42,6 +42,15 @@ public class UserProfile : Profile
                 return visitedCountries == null
                     ? throw new InvalidOperationException("UserTrips is not provided in the mapping context.")
                     : visitedCountries;
+            }))
+            .ForMember(dest => dest.FollowersCount, opt => opt.MapFrom(src => src.Followers.Count))
+            .ForMember(dest => dest.FollowingCount, opt => opt.MapFrom(src => src.Following.Count))
+            .ForMember(dest => dest.IsFollowing, opt => opt.MapFrom((src, dest, destMember, ctx) =>
+            {
+                var isFollowing = ctx.Items[nameof(UserProfileDto.IsFollowing)];
+                return isFollowing == null 
+                    ? throw new InvalidOperationException("IsFollowing is not provided in the mapping context.")
+                    : isFollowing;
             }));
     }
 

@@ -1,4 +1,5 @@
-﻿using Wanderer.Application.Dtos.Trip.Request;
+﻿using Wanderer.Application.Dtos.Shared;
+using Wanderer.Application.Dtos.Trip.Request;
 using Wanderer.Application.Dtos.Trip.Response;
 
 namespace Wanderer.Application.Services;
@@ -6,7 +7,7 @@ namespace Wanderer.Application.Services;
 public interface ITripService
 {
     
-    Task<IEnumerable<TripDto>> Get(FilterOptionsDto filterOptionsDto);
+    Task<IEnumerable<TripDto>> GetUserTrips(Guid userId, FilterOptionsDto filterOptionsDto);
 
     Task<TripDto?> GetById(Guid id);
 
@@ -16,5 +17,7 @@ public interface ITripService
     
     Task DeleteTrip(Guid id);
 
-    Task<TripDto> ChangeTripStatus(Guid id, ChangeTripStatusDto changeTripStatusDto);
+    Task<EmptyResponse> CompleteTrip(Guid id);
+
+    Task<EmptyResponse> PublishTrip(Guid id);
 }

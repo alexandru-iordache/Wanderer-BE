@@ -11,8 +11,11 @@ public class FilterOptionsDto
     public string Status { get; set; }
 
     [FromQuery(Name = "minDate")]
-    public DateOnly? MinDate { get; set; }
+    public DateTime? MinDate { get; set; }
 
     [FromQuery(Name = "maxDate")]
-    public DateOnly? MaxDate { get; set; }
+    public DateTime? MaxDate { get; set; }
+
+    [FromQuery(Name = "isPublished")]
+    public bool? IsPublished { get; set; }
 }

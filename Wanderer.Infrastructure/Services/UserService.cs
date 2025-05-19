@@ -1,12 +1,14 @@
 ﻿using AutoMapper;
 using Microsoft.IdentityModel.Tokens;
-using Wanderer.Application.Dtos.Trip.Request;
+using Wanderer.Application.Dtos.Shared;
 using Wanderer.Application.Dtos.User.Common;
 using Wanderer.Application.Dtos.User.Request;
 using Wanderer.Application.Dtos.User.Response;
 using Wanderer.Application.Mappers;
 using Wanderer.Application.Repositories;
+using Wanderer.Application.Repositories.Constants;
 using Wanderer.Application.Services;
+using Wanderer.Domain.Enums;
 using Wanderer.Domain.Models.Locations;
 using Wanderer.Domain.Models.Users;
 
@@ -63,13 +65,15 @@ public class UserService : IUserService
 
     public async Task<UserProfileDto> GetUserProfile(Guid userId)
     {
-        var user = await userRepository.GetByIdAsync(userId, includeProperties: $"{nameof(User.HomeCity)},{nameof(User.HomeCity)}.{nameof(City.Country)}");
+        var loggedInUserId = httpContextService.GetUserId();
+
+        var user = await userRepository.GetByIdAsync(userId, includeProperties: IncludeConstants.UserConstants.IncludeAll);
         if (user == null)
         {
             throw new InvalidOperationException("User not found");
         }
 
-        var userTrips = await tripRepository.GetByOwnerId(userId);
+        var userTrips = await tripRepository.GetAsync(x => x.OwnerId.Equals(userId) && x.Status == TripStatus.Completed, includeProperties: IncludeConstants.TripConstants.IncludeAll);
         var visitedCities = userTrips.SelectMany(x => x.CityVisits).Select(x => x.City.Name).Distinct();
         var visitedCountries = userTrips.SelectMany(x => x.CityVisits).Select(x => x.City.Country.Name).Distinct();
 
@@ -77,6 +81,7 @@ public class UserService : IUserService
         {
             opt.Items[nameof(UserProfileDto.VisitedCities)] = visitedCities;
             opt.Items[nameof(UserProfileDto.VisitedCountries)] = visitedCountries;
+            opt.Items[nameof(UserProfileDto.IsFollowing)] = user.Followers.Any(x => x.FollowerId == loggedInUserId);
         });
     }
 
@@ -89,6 +94,36 @@ public class UserService : IUserService
         await userRepository.SaveChangesAsync();
 
         return mapper.Map<UserDto>(user);
+    }
+
+
+    public async Task<EmptyResponse> ChangeFollowingStatus(string firebaseId, Guid userId)
+    {
+        var user = await userRepository.GetAsync(x => x.FirebaseId == firebaseId, includeProperties: $"{nameof(User.Followers)},{nameof(User.Following)}")
+                                       .ContinueWith(x => x.Result.FirstOrDefault());
+        if (user == null)
+        {
+            throw new InvalidOperationException("User not found");
+        }
+
+        var following = user.Following.FirstOrDefault(x => x.UserId == userId);
+        if(following == null)
+        {
+            var newFollowing = new UserFollower
+            {
+                UserId = userId,
+                FollowerId = user.Id
+            };
+            user.Following.Add(newFollowing);
+        }
+        else
+        {
+            user.Following.Remove(following);
+        }
+        
+        await userRepository.SaveChangesAsync();
+
+        return new EmptyResponse();
     }
 
     public async Task<UserDto> UpdateUser(UpdateUserDto updateUserDto)

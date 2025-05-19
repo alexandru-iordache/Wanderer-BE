@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Wanderer.Infrastructure.Context;
 
@@ -11,9 +12,11 @@ using Wanderer.Infrastructure.Context;
 namespace Wanderer.Infrastructure.Migrations
 {
     [DbContext(typeof(WandererDbContext))]
-    partial class WandererDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250518095907_AddFollowersTable")]
+    partial class AddFollowersTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -151,10 +154,6 @@ namespace Wanderer.Infrastructure.Migrations
                         .HasColumnType("uniqueidentifier")
                         .HasColumnName("ID")
                         .HasDefaultValueSql("NEWID()");
-
-                    b.Property<bool>("IsPublished")
-                        .HasColumnType("bit")
-                        .HasColumnName("IS_PUBLISHED");
 
                     b.Property<Guid>("OwnerId")
                         .HasColumnType("uniqueidentifier");

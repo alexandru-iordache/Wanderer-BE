@@ -19,4 +19,7 @@ public class Trip : BaseEntity
 
     [Column("STATUS")]
     public TripStatus Status { get; set; } = TripStatus.NotCompleted;
+
+    [Column("IS_PUBLISHED")]
+    public bool IsPublished { get; set; } = false;
 }

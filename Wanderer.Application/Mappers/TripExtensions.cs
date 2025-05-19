@@ -11,8 +11,13 @@ public static class TripExtensions
         trip.CityVisits = tripValueObject.CityVisits;
     }
 
-    public static void ChangeTripStatus(this Trip trip, bool isCompleted)
+    public static void CompleteTrip(this Trip trip)
     {
-        trip.Status = isCompleted ? Domain.Enums.TripStatus.Completed : Domain.Enums.TripStatus.NotCompleted;
+        trip.Status = Domain.Enums.TripStatus.Completed;
+    }
+
+    public static void PublishTrip(this Trip trip)
+    {
+        trip.IsPublished = true;
     }
 }

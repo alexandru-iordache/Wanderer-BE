@@ -31,6 +31,8 @@ public class WandererDbContext : DbContext
 
     public DbSet<WaypointVisit> WaypointVisits { get; set; }
 
+    public DbSet<UserFollower> UserFollowers { get; set; }
+
     public WandererDbContext(DbContextOptions<WandererDbContext> options) : base(options)
     {
     } 
@@ -45,5 +47,6 @@ public class WandererDbContext : DbContext
         modelBuilder.ApplyConfiguration(new CityVisitConfiguration());
         modelBuilder.ApplyConfiguration(new DayVisitConfiguration());
         modelBuilder.ApplyConfiguration(new WaypointVisitConfiguration());
+        modelBuilder.ApplyConfiguration(new UserFollowerConfiguration());
     }
 }

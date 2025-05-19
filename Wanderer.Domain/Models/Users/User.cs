@@ -25,4 +25,8 @@ public class User : BaseEntity
 
     [Column("AVATAR_URL")]
     public string? AvatarUrl { get; set; }
+
+    public ICollection<UserFollower> Followers { get; set; } = new List<UserFollower>();
+
+    public ICollection<UserFollower> Following { get; set; } = new List<UserFollower>();
 }

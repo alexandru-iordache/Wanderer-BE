@@ -16,7 +16,13 @@ public class FirebaseAuthenticationMiddleware
     public async Task InvokeAsync(HttpContext context)
     {
         var endpoint = context.GetEndpoint();
-        if (!endpoint!.Metadata.Any(x => x is AuthorizeAttribute))
+        if(endpoint == null)
+        {
+            context.Response.StatusCode = 404;
+            return;
+        }
+
+        if (!endpoint.Metadata.Any(x => x is AuthorizeAttribute))
         {
             await _next(context);
         }

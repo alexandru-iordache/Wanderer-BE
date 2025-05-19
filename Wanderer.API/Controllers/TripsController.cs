@@ -12,16 +12,19 @@ namespace Wanderer.API.Controllers;
 public class TripsController : ControllerBase
 {
     private readonly ITripService tripService;
+    private readonly IHttpContextService httpContextService;
 
-    public TripsController(ITripService tripService)
+    public TripsController(ITripService tripService, IHttpContextService httpContextService)
     {
         this.tripService = tripService;
+        this.httpContextService = httpContextService;
     }
 
     [HttpGet]
     public async Task<IActionResult> GetTrips(FilterOptionsDto filterOptionsDto)
     {
-        return Ok(await tripService.Get(filterOptionsDto));
+        var userId = httpContextService.GetUserId();
+        return Ok(await tripService.GetUserTrips(userId, filterOptionsDto));
     }
 
     [HttpGet("{id}")]
@@ -36,11 +39,16 @@ public class TripsController : ControllerBase
         return Created(nameof(GetTrips), await tripService.InsertTrip(addTripDto));
     }
 
-    [HttpPost("{id}/status")]
-    public async Task<IActionResult> ChangeTripsStatus(Guid id, [FromBody] ChangeTripStatusDto changeTripStatusDto)
+    [HttpPost("{id}/complete")]
+    public async Task<IActionResult> CompleteTrip(Guid id)
     {
-        var trip = await tripService.ChangeTripStatus(id, changeTripStatusDto);
-        return Ok(trip);
+        return Ok(await tripService.CompleteTrip(id));
+    }
+
+    [HttpPost("{id}/publish")]
+    public async Task<IActionResult> PublishTrip(Guid id)
+    {
+        return Ok(await tripService.PublishTrip(id));
     }
 
     [HttpPut("{id}")]

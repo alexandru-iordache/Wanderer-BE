@@ -11,4 +11,8 @@ public class TripDto
     public required DateTime StartDate { get; set; }
 
     public IEnumerable<CityVisitDto> CityVisits { get; set; } = [];
+
+    public bool IsCompleted { get; set; }
+
+    public bool IsPublished { get; set; }
 }
