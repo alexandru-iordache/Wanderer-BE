@@ -16,6 +16,7 @@ public static class AuthorizationConfigurationExtension
                     options.Authority = issuerSection.Value;
                     options.TokenValidationParameters = new TokenValidationParameters
                     {
+                        ValidateIssuerSigningKey = false,
                         ValidateIssuer = true,
                         ValidIssuer = issuerSection.Value,
                         ValidateAudience = true,

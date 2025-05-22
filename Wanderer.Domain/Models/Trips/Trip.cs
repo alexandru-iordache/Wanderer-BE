@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using Wanderer.Domain.Enums;
+using Wanderer.Domain.Models.Posts;
 using Wanderer.Domain.Models.Trips.Visits;
 using Wanderer.Domain.Models.Users;
 
@@ -22,4 +23,6 @@ public class Trip : BaseEntity
 
     [Column("IS_PUBLISHED")]
     public bool IsPublished { get; set; } = false;
+
+    public ICollection<Post> Posts { get; set; } = new List<Post>();
 }

@@ -1,10 +1,12 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Wanderer.Domain.Models.Locations;
+using Wanderer.Domain.Models.Posts;
 using Wanderer.Domain.Models.Trips;
 using Wanderer.Domain.Models.Trips.Visits;
 using Wanderer.Domain.Models.Users;
 using Wanderer.Infrastructure.Context.Configurations.Locations;
 using Wanderer.Infrastructure.Context.Configurations.Places;
+using Wanderer.Infrastructure.Context.Configurations.Posts;
 using Wanderer.Infrastructure.Context.Configurations.Trips;
 using Wanderer.Infrastructure.Context.Configurations.Trips.Visits;
 using Wanderer.Infrastructure.Context.Configurations.Users;
@@ -33,6 +35,14 @@ public class WandererDbContext : DbContext
 
     public DbSet<UserFollower> UserFollowers { get; set; }
 
+    public DbSet<Post> Posts { get; set; }
+
+    public DbSet<PostLike> PostLikes { get; set; }
+
+    public DbSet<PostComment> PostComments { get; set; }
+
+    public DbSet<PostImage> PostImages { get; set; }
+
     public WandererDbContext(DbContextOptions<WandererDbContext> options) : base(options)
     {
     } 
@@ -48,5 +58,9 @@ public class WandererDbContext : DbContext
         modelBuilder.ApplyConfiguration(new DayVisitConfiguration());
         modelBuilder.ApplyConfiguration(new WaypointVisitConfiguration());
         modelBuilder.ApplyConfiguration(new UserFollowerConfiguration());
+        modelBuilder.ApplyConfiguration(new PostConfiguration());
+        modelBuilder.ApplyConfiguration(new PostLikeConfiguration());
+        modelBuilder.ApplyConfiguration(new PostCommentConfiguration());
+        modelBuilder.ApplyConfiguration(new PostImageConfiguration());
     }
 }

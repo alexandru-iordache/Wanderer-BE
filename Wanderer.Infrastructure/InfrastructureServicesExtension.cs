@@ -27,6 +27,7 @@ public static class InfrastructureServicesExtension
 
         services.AddScoped<IUserService, UserService>();
         services.AddScoped<ITripService, TripService>();
+        services.AddTransient<IPostService, PostService>();
         services.AddTransient<IUserStatsService, UserStatsService>();
         #endregion
 
@@ -36,6 +37,7 @@ public static class InfrastructureServicesExtension
         services.AddScoped<ICityRepository, CityRepository>();
         services.AddScoped<IWaypointRepository, WaypointRepository>();
         services.AddScoped<ICountryRepository, CountryRepository>();
+        services.AddScoped<IPostRepository, PostRepository>();
         #endregion
 
         #region Mappers

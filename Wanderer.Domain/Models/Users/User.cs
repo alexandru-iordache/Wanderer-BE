@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Wanderer.Domain.Models.Locations;
+using Wanderer.Domain.Models.Posts;
 using Wanderer.Domain.Models.Trips;
 
 namespace Wanderer.Domain.Models.Users;
@@ -22,6 +23,12 @@ public class User : BaseEntity
     public City? HomeCity { get; set; }
 
     public ICollection<Trip> Trips { get; set; }
+
+    public ICollection<Post> Posts { get; set; } = new List<Post>();
+
+    public ICollection<PostLike> Likes { get; set; } = new List<PostLike>();
+
+    public ICollection<PostComment> Comments { get; set; } = new List<PostComment>();
 
     [Column("AVATAR_URL")]
     public string? AvatarUrl { get; set; }
