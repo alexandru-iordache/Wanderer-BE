@@ -1,5 +1,7 @@
 using FirebaseAdmin;
 using Google.Apis.Auth.OAuth2;
+using Microsoft.Extensions.FileProviders;
+using Microsoft.Extensions.Hosting;
 using Wanderer.API.Config;
 using Wanderer.API.Middlewares;
 using Wanderer.Application;
@@ -32,8 +34,20 @@ builder.Services.AddCors(options =>
                           .WithMethods("POST", "PUT", "DELETE")
                           .AllowAnyHeader());
 });
-
 var app = builder.Build();
+
+var hostEnvironment = app.Services.GetRequiredService<IWebHostEnvironment>();
+var uploadsPath = Path.Combine(hostEnvironment.ContentRootPath, "uploads");
+if (!Directory.Exists(uploadsPath))
+{
+    Directory.CreateDirectory(uploadsPath);
+}
+app.UseStaticFiles(new StaticFileOptions
+{
+    FileProvider = new PhysicalFileProvider(
+        Path.Combine(builder.Environment.ContentRootPath, "uploads")),
+    RequestPath = "/uploads"
+});
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
