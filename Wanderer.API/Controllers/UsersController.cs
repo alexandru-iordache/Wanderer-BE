@@ -4,6 +4,7 @@ using Wanderer.API.Attributes;
 using Wanderer.Application.Dtos.Trip.Request;
 using Wanderer.Application.Dtos.User.Request;
 using Wanderer.Application.Services;
+using Wanderer.Infrastructure.Services;
 using Wanderer.Shared.Constants;
 
 namespace Wanderer.API.Controllers;
@@ -15,13 +16,15 @@ public class UsersController : ControllerBase
 {
     private readonly IUserService userService;
     private readonly ITripService tripService;
+    private readonly IPostService postService;
     private readonly IHttpContextService httpContextService;
 
-    public UsersController(IUserService userService, IHttpContextService httpContextService, ITripService tripService)
+    public UsersController(IUserService userService, IHttpContextService httpContextService, ITripService tripService, IPostService postService)
     {
         this.userService = userService;
-        this.httpContextService = httpContextService;
         this.tripService = tripService;
+        this.postService = postService;
+        this.httpContextService = httpContextService;
     }
 
     [HttpGet]
@@ -63,6 +66,12 @@ public class UsersController : ControllerBase
     public async Task<IActionResult> GetUserTrips(Guid userId, FilterOptionsDto filterOptionsDto)
     {
         return Ok(await tripService.GetUserTrips(userId, filterOptionsDto));
+    }
+
+    [HttpGet("{userId}/posts")]
+    public async Task<IActionResult> Get(Guid userId)
+    {
+        return Ok(await postService.GetUserPosts(userId));
     }
 
     [HttpPost]

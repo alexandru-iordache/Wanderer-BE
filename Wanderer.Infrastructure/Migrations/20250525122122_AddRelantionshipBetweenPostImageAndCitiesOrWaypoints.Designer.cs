@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Wanderer.Infrastructure.Context;
 
@@ -11,9 +12,11 @@ using Wanderer.Infrastructure.Context;
 namespace Wanderer.Infrastructure.Migrations
 {
     [DbContext(typeof(WandererDbContext))]
-    partial class WandererDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250525122122_AddRelantionshipBetweenPostImageAndCitiesOrWaypoints")]
+    partial class AddRelantionshipBetweenPostImageAndCitiesOrWaypoints
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -183,30 +186,22 @@ namespace Wanderer.Infrastructure.Migrations
 
             modelBuilder.Entity("Wanderer.Domain.Models.Posts.PostComment", b =>
                 {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier")
-                        .HasColumnName("ID")
-                        .HasDefaultValueSql("NEWID()");
-
-                    b.Property<string>("Content")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)")
-                        .HasColumnName("Content");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2")
-                        .HasColumnName("CREATED_AT");
-
                     b.Property<Guid>("PostId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("UserId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.HasKey("Id");
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("CREATED_AT");
 
-                    b.HasIndex("PostId");
+                    b.Property<string>("Content")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Content");
+
+                    b.HasKey("PostId", "UserId", "CreatedAt");
 
                     b.HasIndex("UserId");
 

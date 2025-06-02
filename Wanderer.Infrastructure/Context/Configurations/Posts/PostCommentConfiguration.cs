@@ -10,7 +10,12 @@ public class PostCommentConfiguration : IEntityTypeConfiguration<PostComment>
     {
         builder.ToTable("POST_COMMENTS");
 
-        builder.HasKey(x => new { x.PostId, x.UserId, x.CreatedAt });
+        builder.HasKey(x => x.Id);
+
+        builder.Property(x => x.Id)
+            .HasDefaultValueSql("NEWID()")
+            .HasColumnType("uniqueidentifier")
+            .HasColumnName("ID");
 
         builder.HasOne(x => x.User)
             .WithMany(x => x.Comments)

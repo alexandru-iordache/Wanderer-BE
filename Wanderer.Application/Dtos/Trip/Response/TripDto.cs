@@ -12,6 +12,8 @@ public class TripDto
 
     public IEnumerable<CityVisitDto> CityVisits { get; set; } = [];
 
+    public Guid OwnerId { get; set; }
+
     public bool IsCompleted { get; set; }
 
     public bool IsPublished { get; set; }

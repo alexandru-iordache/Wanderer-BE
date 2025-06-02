@@ -61,6 +61,47 @@ public abstract class Repository<T> : IRepository<T> where T : BaseEntity
         return await query.ToListAsync();
     }
 
+    public virtual async Task<IEnumerable<T>> GetBatchAsync(
+        Expression<Func<T, bool>>? filter = null,
+        Func<IQueryable<T>, IOrderedQueryable<T>>? orderBy = null,
+        string includeProperties = "",
+        int skip = 0,
+        int top = 25)
+    {
+        IQueryable<T> query = _dbSet;
+
+        if (filter != null)
+        {
+            query = query.Where(filter);
+        }
+
+        foreach (var includeProperty in includeProperties.Split(',', StringSplitOptions.RemoveEmptyEntries))
+        {
+            query = query.Include(includeProperty);
+        }
+
+        if (orderBy != null)
+        {
+            query = orderBy(query);
+        }
+
+        query = query.Skip(skip).Take(top);
+
+        return await query.ToListAsync();
+    }
+
+    public virtual async Task<int> GetCountAsync(Expression<Func<T, bool>>? filter = null)
+    {
+        IQueryable<T> query = _dbSet;
+
+        if (filter != null)
+        {
+            query = query.Where(filter);
+        }
+
+        return await query.CountAsync();
+    }
+
     public virtual async Task InsertAsync(T entity)
     {
         await _dbSet.AddAsync(entity);

@@ -1,4 +1,5 @@
 ﻿using Wanderer.Domain.Models.Locations;
+using Wanderer.Domain.Models.Posts;
 using Wanderer.Domain.Models.Trips;
 using Wanderer.Domain.Models.Trips.Visits;
 using Wanderer.Domain.Models.Users;
@@ -17,6 +18,12 @@ public static class IncludeConstants
     public static class UserConstants
     {
         public const string IncludeAll = $"{nameof(User.HomeCity)},{nameof(User.HomeCity)}.{nameof(City.Country)}," +
-                                         $"{nameof(User.Followers)},{nameof(User.Followers)}";
+                                         $"{nameof(User.Followers)},{nameof(User.Following)}";
+    }
+
+    public static class PostConstants
+    {
+        public const string IncludeAll = $"{nameof(Post.Images)}.{nameof(PostImage.City)},{nameof(Post.Images)}.{nameof(PostImage.Waypoint)},{nameof(Post.Owner)}," +
+                                         $"{nameof(Post.Comments)},{nameof(Post.Likes)}.{nameof(PostLike.User)}";
     }
 }

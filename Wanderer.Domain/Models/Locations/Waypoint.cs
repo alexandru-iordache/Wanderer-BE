@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations.Schema;
+using Wanderer.Domain.Models.Posts;
 using Wanderer.Domain.Models.Trips.Visits;
 
 namespace Wanderer.Domain.Models.Locations;
@@ -23,6 +24,8 @@ public class Waypoint : BaseEntity
     public decimal Longitude { get; set; }
 
     public ICollection<WaypointVisit> WaypointVisits { get; set; } = new List<WaypointVisit>();
+
+    public ICollection<PostImage> Images { get; set; } = new List<PostImage>();
 
     public required string Type { get; set; }
 }

@@ -16,7 +16,7 @@ public class TripProfile : Profile
 
         CreateMap<TripModel, TripDto>()
             .ForMember(dest => dest.StartDate, src => src.MapFrom(x => x.StartDate.ToDateTime(TimeOnly.MinValue, DateTimeKind.Utc)))
-            .ForMember(dest => dest.CityVisits, src => src.MapFrom(x => x.CityVisits))
+            .ForMember(dest => dest.CityVisits, src => src.MapFrom(x => x.CityVisits == null ? null : x.CityVisits.OrderBy(x => x.Order)))
             .ForMember(dest => dest.IsCompleted, src => src.MapFrom(x => x.Status == Domain.Enums.TripStatus.Completed ? true : false));
 
         CreateMap<TripDto, TripModel>()

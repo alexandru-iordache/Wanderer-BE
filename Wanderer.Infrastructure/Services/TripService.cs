@@ -1,16 +1,21 @@
 ﻿using AutoMapper;
 using LinqKit;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 using Wanderer.Application.Dtos.Shared;
 using Wanderer.Application.Dtos.Trip.Request;
 using Wanderer.Application.Dtos.Trip.Response;
 using Wanderer.Application.Mappers;
 using Wanderer.Application.Repositories;
 using Wanderer.Application.Repositories.Constants;
+using Wanderer.Application.Scheduler;
+using Wanderer.Application.Scheduler.Dtos;
+using Wanderer.Application.Scheduler.Dtos.DataDtos;
 using Wanderer.Application.Services;
 using Wanderer.Domain.Enums;
 using Wanderer.Domain.Models.Locations;
 using Wanderer.Domain.Models.Trips;
+using Wanderer.Infrastructure.Scheduler.Jobs;
 
 namespace Wanderer.Infrastructure.Services;
 
@@ -22,7 +27,7 @@ public class TripService : ITripService
     private readonly ICityRepository cityRepository;
     private readonly IWaypointRepository waypointRepository;
     private readonly ICountryRepository countryRepository;
-    private readonly IUserStatsService userStatsService;
+    private readonly ISchedulerService schedulerService;
     private readonly ILogger<TripService> logger;
 
     public TripService(
@@ -32,7 +37,7 @@ public class TripService : ITripService
         ICityRepository cityRepository,
         IWaypointRepository waypointRepository,
         ICountryRepository countryRepository,
-        IUserStatsService userStatsService,
+        ISchedulerService schedulerService,
         ILogger<TripService> logger)
     {
         this.mapper = mapper;
@@ -41,7 +46,7 @@ public class TripService : ITripService
         this.cityRepository = cityRepository;
         this.waypointRepository = waypointRepository;
         this.countryRepository = countryRepository;
-        this.userStatsService = userStatsService;
+        this.schedulerService = schedulerService;
         this.logger = logger;
     }
 
@@ -97,7 +102,8 @@ public class TripService : ITripService
         await tripRepository.InsertAsync(trip);
         await tripRepository.SaveChangesAsync();
 
-        Task.Run(() => userStatsService.ComputeUserStats(userId, false));
+        await ScheduleUserStatsJob(userId, false);
+        await ScheduleUserFeatureVectorJob(userId, false);
 
         return mapper.Map<TripDto>(trip);
     }
@@ -119,7 +125,8 @@ public class TripService : ITripService
         trip.UpdateTrip(tripValueObject);
         await tripRepository.SaveChangesAsync();
 
-        Task.Run(() => userStatsService.ComputeUserStats(userId, false));
+        await ScheduleUserStatsJob(userId, false);
+        await ScheduleUserFeatureVectorJob(userId, false);
 
         return mapper.Map<TripDto>(trip);
     }
@@ -133,7 +140,8 @@ public class TripService : ITripService
         tripRepository.Delete(trip);
         await tripRepository.SaveChangesAsync();
 
-        Task.Run(() => userStatsService.ComputeUserStats(userId, false));
+        await ScheduleUserStatsJob(userId, false);
+        await ScheduleUserFeatureVectorJob(userId, false);
     }
 
     public async Task<EmptyResponse> CompleteTrip(Guid id)
@@ -145,8 +153,7 @@ public class TripService : ITripService
         trip.CompleteTrip();
         await tripRepository.SaveChangesAsync();
 
-        // Compute the completed stats, since the not completed ones are the all existing in the db
-        Task.Run(() => userStatsService.ComputeUserStats(userId, true));
+        await ScheduleUserStatsJob(userId, true);
 
         return new EmptyResponse();
     }
@@ -301,5 +308,47 @@ public class TripService : ITripService
         }
 
         return waypointCityMapping;
+    }
+
+    private async Task ScheduleUserStatsJob(Guid userId, bool IsCompleted)
+    {
+        var userStatsDataDto = new UserStatsJobDataDto
+        {
+            UserId = userId,
+            IsCompleted = IsCompleted
+        };
+
+        var scheduleJobDto = new ScheduleJobDto 
+        { 
+            JobDescription = "Compute user stats",
+            JobName = "UserStatsJob",
+            JobIdentifier = userId.ToString(),
+            StartAt = DateTimeOffset.UtcNow.AddSeconds(1),
+            SerializedData = JsonConvert.SerializeObject(userStatsDataDto),
+            JobRoutine = new JobRoutineDto() { Repeat = false }
+        };
+
+        await schedulerService.ScheduleJob<UserStatsJob>(scheduleJobDto);
+    }
+
+    private async Task ScheduleUserFeatureVectorJob(Guid userId, bool published)
+    {
+        var userFeatureVectorJobDataDto = new UserFeatureVectorJobDataDto
+        {
+            UserId = userId,
+            Published = published
+        };
+
+        var scheduleJobDto = new ScheduleJobDto
+        {
+            JobDescription = "Compute user feature vector job",
+            JobName = "UserFeatureJob",
+            JobIdentifier = userId.ToString(),
+            StartAt = DateTimeOffset.UtcNow.AddSeconds(1),
+            SerializedData = JsonConvert.SerializeObject(userFeatureVectorJobDataDto),
+            JobRoutine = new JobRoutineDto() { Repeat = false }
+        };
+
+        await schedulerService.ScheduleJob<UserFeatureVectorJob>(scheduleJobDto);
     }
 }

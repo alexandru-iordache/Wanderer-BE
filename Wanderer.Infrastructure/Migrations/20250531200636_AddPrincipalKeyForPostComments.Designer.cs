@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Wanderer.Infrastructure.Context;
 
@@ -11,9 +12,11 @@ using Wanderer.Infrastructure.Context;
 namespace Wanderer.Infrastructure.Migrations
 {
     [DbContext(typeof(WandererDbContext))]
-    partial class WandererDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250531200636_AddPrincipalKeyForPostComments")]
+    partial class AddPrincipalKeyForPostComments
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

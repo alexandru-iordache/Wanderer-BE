@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
+using Wanderer.Domain.Models.Posts;
 using Wanderer.Domain.Models.Trips.Visits;
 using Wanderer.Domain.Models.Users;
 
@@ -32,4 +33,6 @@ public class City : BaseEntity
     public ICollection<CityVisit> CityVisits { get; set; } = new List<CityVisit>();
 
     public ICollection<User> Users { get; set; } = new List<User>();
+
+    public ICollection<PostImage> Images { get; set; } = new List<PostImage>();
 }

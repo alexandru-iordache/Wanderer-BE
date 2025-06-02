@@ -6,6 +6,7 @@ using Wanderer.Application.Repositories;
 using Wanderer.Application.Services;
 using Wanderer.Infrastructure.Context;
 using Wanderer.Infrastructure.Repositories;
+using Wanderer.Infrastructure.Scheduler;
 using Wanderer.Infrastructure.Services;
 
 namespace Wanderer.Infrastructure;
@@ -15,12 +16,14 @@ public static class InfrastructureServicesExtension
     public static IServiceCollection AddInfrastructureServices(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddDbContext<WandererDbContext>(options =>
-            options.UseSqlServer(configuration.GetConnectionString("WandererDBConnection")), ServiceLifetime.Singleton);
+            options.UseSqlServer(configuration.GetConnectionString("WandererDBConnection")), ServiceLifetime.Scoped);
 
         services.AddStackExchangeRedisCache(options =>
         {
             options.Configuration = configuration.GetConnectionString("WandererRedisConnection");
         });
+
+        services.AddQuartzConfiguration(configuration);
 
         #region Services
         services.AddScoped<IHttpContextService, HttpContextService>();
@@ -28,7 +31,10 @@ public static class InfrastructureServicesExtension
         services.AddScoped<IUserService, UserService>();
         services.AddScoped<ITripService, TripService>();
         services.AddTransient<IPostService, PostService>();
+
         services.AddTransient<IUserStatsService, UserStatsService>();
+        services.AddTransient<IUserFeatureVectorInteractionService, UserFeatureVectorInteractionService>();
+        services.AddTransient<IUserFeedService, UserFeedService>();
         #endregion
 
         #region Repositories

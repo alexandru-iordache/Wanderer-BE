@@ -11,4 +11,10 @@ public class UserStatsDto
     public int WaypointsCount { get; set; } = 0;
 
     public int DaysCount { get; set; } = 0;
+
+    public List<Guid> CountriesIds { get; set; } = [];
+
+    public List<Guid> CitiesIds { get; set; } = [];
+
+    public int AverageTripLength { get; set; }
 }

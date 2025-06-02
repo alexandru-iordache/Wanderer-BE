@@ -50,9 +50,10 @@ public class UserStatsService : IUserStatsService
     {
         var tripsCount = userTrips.Count();
 
-        var cities = userTrips.SelectMany(x => x.CityVisits).Select(x => x.City).Distinct();
-        var citiesCount = cities.Count();
-        var countriesCount = cities.Select(x => x.Country).Distinct().Count();
+        var cities = userTrips.SelectMany(x => x.CityVisits).Select(x => x.City);
+        var citiesCount = cities.Distinct().Count();
+        var countries = cities.Select(x => x.Country);
+        var countriesCount = countries.Distinct().Count();
 
         var dayVisits = userTrips.SelectMany(x => x.CityVisits).SelectMany(x => x.Days);
         var daysCount = dayVisits.Count();
@@ -64,7 +65,20 @@ public class UserStatsService : IUserStatsService
             CountriesCount = countriesCount,
             CitiesCount = citiesCount,
             WaypointsCount = waypointsCount,
-            DaysCount = daysCount
+            DaysCount = daysCount,
+            CountriesIds = countries
+                .GroupBy(c => c.Id)
+                .OrderByDescending(g => g.Count())
+                .Take(10)
+                .Select(g => g.Key)
+                .ToList(),
+            CitiesIds = cities
+                .GroupBy(c => c.Id)
+                .OrderByDescending(g => g.Count())
+                .Take(10)
+                .Select(g => g.Key)
+                .ToList(),
+            AverageTripLength = (int)userTrips.Select(x => x.CityVisits).Select(x => x.Count).DefaultIfEmpty(0).Average()
         };
     }
 

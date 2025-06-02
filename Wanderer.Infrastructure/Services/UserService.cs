@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.IdentityModel.Tokens;
+using Newtonsoft.Json;
 using Wanderer.Application.Dtos.Shared;
 using Wanderer.Application.Dtos.User.Common;
 using Wanderer.Application.Dtos.User.Request;
@@ -7,10 +8,14 @@ using Wanderer.Application.Dtos.User.Response;
 using Wanderer.Application.Mappers;
 using Wanderer.Application.Repositories;
 using Wanderer.Application.Repositories.Constants;
+using Wanderer.Application.Scheduler;
+using Wanderer.Application.Scheduler.Dtos.DataDtos;
+using Wanderer.Application.Scheduler.Dtos;
 using Wanderer.Application.Services;
 using Wanderer.Domain.Enums;
 using Wanderer.Domain.Models.Locations;
 using Wanderer.Domain.Models.Users;
+using Wanderer.Infrastructure.Scheduler.Jobs;
 
 namespace Wanderer.Infrastructure.Services;
 
@@ -23,6 +28,7 @@ public class UserService : IUserService
     private readonly ICountryRepository countryRepository;
     private readonly ITripRepository tripRepository;
     private readonly IMapper mapper;
+    private readonly ISchedulerService schedulerService;
 
     public UserService(
         IUserRepository userRepository,
@@ -31,7 +37,8 @@ public class UserService : IUserService
         IUserStatsService userStatsService,
         ICityRepository cityRepository,
         ICountryRepository countryRepository,
-        ITripRepository tripRepository)
+        ITripRepository tripRepository,
+        ISchedulerService schedulerService)
     {
         this.userRepository = userRepository;
         this.mapper = mapper;
@@ -40,6 +47,7 @@ public class UserService : IUserService
         this.cityRepository = cityRepository;
         this.countryRepository = countryRepository;
         this.tripRepository = tripRepository;
+        this.schedulerService = schedulerService;
     }
 
     public async Task<IEnumerable<UserDto>> Get()
@@ -93,6 +101,9 @@ public class UserService : IUserService
         await userRepository.InsertAsync(user);
         await userRepository.SaveChangesAsync();
 
+        await ScheduleUserFeedJob(user.Id, true);
+        await ScheduleUserFeedJob(user.Id, false);
+
         return mapper.Map<UserDto>(user);
     }
 
@@ -122,6 +133,7 @@ public class UserService : IUserService
         }
         
         await userRepository.SaveChangesAsync();
+        await ScheduleUserFeedJob(user.Id, true);
 
         return new EmptyResponse();
     }
@@ -186,5 +198,31 @@ public class UserService : IUserService
         await cityRepository.SaveChangesAsync();
 
         return city.Id;
+    }
+
+    private async Task ScheduleUserFeedJob(Guid userId, bool runNow)
+    {
+        var userFeedDataDto = new UserFeedJobDataDto
+        {
+            UserId = userId
+        };
+
+        JobRoutineDto jobRoutineDto = new JobRoutineDto
+        {
+            Repeat = !runNow,
+            CronExpression = runNow ? null : "0 2 * * *"
+        };
+
+        var scheduleJobDto = new ScheduleJobDto
+        {
+            JobDescription = "Compute user feed",
+            JobName = "UserFeedJob" + $"{(runNow ? "_Instant" : string.Empty)}",
+            JobIdentifier = userId.ToString(),
+            StartAt = DateTimeOffset.UtcNow.AddSeconds(1),
+            SerializedData = JsonConvert.SerializeObject(userFeedDataDto),
+            JobRoutine = jobRoutineDto
+        };
+
+        await schedulerService.ScheduleJob<UserFeedJob>(scheduleJobDto);
     }
 }

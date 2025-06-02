@@ -18,4 +18,8 @@ public interface IRepository<T> where T : BaseEntity
     void Update(T entity);
 
     Task SaveChangesAsync();
+
+    Task<IEnumerable<T>> GetBatchAsync(Expression<Func<T, bool>>? filter = null, Func<IQueryable<T>, IOrderedQueryable<T>>? orderBy = null, string includeProperties = "", int skip = 0, int top = 25);
+    
+    Task<int> GetCountAsync(Expression<Func<T, bool>>? filter = null);
 }

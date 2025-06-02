@@ -1,4 +1,4 @@
-﻿namespace Wanderer.Application.Dtos.Post;
+﻿namespace Wanderer.Application.Dtos.Post.Request;
 
 public record UploadImageResponseDto
 {
