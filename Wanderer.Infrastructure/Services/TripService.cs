@@ -170,6 +170,19 @@ public class TripService : ITripService
         return new EmptyResponse();
     }
 
+    public async Task<TripDto> CloneTrip(Guid id)
+    {
+        var userId = httpContextService.GetUserId();
+        var trip = await tripRepository.GetByIdAsync(id, includeProperties: IncludeConstants.TripConstants.IncludeAll) ?? throw new KeyNotFoundException("Trip not found!");
+
+        var clonedTrip = trip.Clone(userId);
+
+        await tripRepository.InsertAsync(clonedTrip);
+        await tripRepository.SaveChangesAsync();
+
+        return mapper.Map<TripDto>(clonedTrip);
+    }
+
     private async Task BuildTrip(Trip tripValueObject, IEnumerable<string> countryNames, IEnumerable<string> cityPlaceIds, Dictionary<string, string> waypointCityRelations)
     {
         IEnumerable<Country> countries = await GetCountries(tripValueObject, countryNames);

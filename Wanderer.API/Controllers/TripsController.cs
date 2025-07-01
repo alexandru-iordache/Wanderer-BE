@@ -45,6 +45,12 @@ public class TripsController : ControllerBase
         return Ok(await tripService.CompleteTrip(id));
     }
 
+    [HttpPost("{id}/clone")]
+    public async Task<IActionResult> CloneTrip(Guid id)
+    {
+        return Ok(await tripService.CloneTrip(id));
+    }
+
     [HttpPost("{id}/publish")]
     public async Task<IActionResult> PublishTrip(Guid id)
     {

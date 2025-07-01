@@ -20,4 +20,6 @@ public interface ITripService
     Task<EmptyResponse> CompleteTrip(Guid id);
 
     Task<EmptyResponse> PublishTrip(Guid id);
+
+    Task<TripDto> CloneTrip(Guid id);
 }
