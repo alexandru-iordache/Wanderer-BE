@@ -14,6 +14,8 @@ public interface IPostService
     
     Task<IEnumerable<PostDto>> GetUserPosts(Guid userId);
 
+    Task<IEnumerable<PostDto>> GetUserFeed(Guid userId, int skip, int top);
+
     Task ChangePostLikeStatusAsync(Guid postId, Guid userId, CancellationToken cancellationToken);
     
     Task<string> SaveImage(IFormFile image, string uploadsPath);

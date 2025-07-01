@@ -1,7 +1,6 @@
 using FirebaseAdmin;
 using Google.Apis.Auth.OAuth2;
 using Microsoft.Extensions.FileProviders;
-using Microsoft.Extensions.Hosting;
 using Wanderer.API.Config;
 using Wanderer.API.Middlewares;
 using Wanderer.Application;

@@ -38,14 +38,15 @@ public class UserFeedJob : IJob
             throw new ArgumentNullException(nameof(serializedData), "Serialized data for UserStatsJob cannot be null.");
         }
 
-        var threshold = DateTime.UtcNow.AddDays(-30);
         var dataObject = JsonConvert.DeserializeObject<UserFeedJobDataDto>(serializedData)!;
-
+        
+        var threshold = DateTime.UtcNow.AddDays(-30);
+        
         var currentUserFeatureVectorDto = await userFeatureVectorInteractionService.GetUserFeatureVector(dataObject.UserId, false);
         if (currentUserFeatureVectorDto == null)
         {
             var trendingPosts = await postRepository.GetBatchAsync(
-               filter: x => x.CreatedAt > threshold,
+               filter: x => !x.OwnerId.Equals(dataObject.UserId) && x.CreatedAt > threshold,
                orderBy: x => x.OrderByDescending(x => x.Likes.Count + x.Comments.Count).ThenByDescending(x => x.CreatedAt),
                skip: 0,
                top: 200);
@@ -85,7 +86,7 @@ public class UserFeedJob : IJob
         else
         {
             var trendingPosts = await postRepository.GetBatchAsync(
-                filter: x => !postIds.Contains(x.Id) && x.CreatedAt > threshold,
+                filter: x => !x.OwnerId.Equals(dataObject.UserId) && !postIds.Contains(x.Id) && x.CreatedAt > threshold,
                 orderBy: x => x.OrderByDescending(x => x.Likes.Count + x.Comments.Count).ThenByDescending(x => x.CreatedAt),
                 skip: 0,
                 top: 300 - postIds.Count);

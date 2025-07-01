@@ -28,13 +28,13 @@ public class TripsController : ControllerBase
     }
 
     [HttpGet("{id}")]
-    public async Task<IActionResult> GetTripById(Guid id)
+    public async Task<IActionResult> GetTripById([FromRoute]Guid id)
     {
         return Ok(await tripService.GetById(id));
     }
 
     [HttpPost]
-    public async Task<IActionResult> PostTrip([FromBody] AddTripDto addTripDto)
+    public async Task<IActionResult> CreateTrip([FromBody] AddTripDto addTripDto)
     {
         return Created(nameof(GetTrips), await tripService.InsertTrip(addTripDto));
     }

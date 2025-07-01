@@ -74,6 +74,12 @@ public class UsersController : ControllerBase
         return Ok(await postService.GetUserPosts(userId));
     }
 
+    [HttpGet("{userId}/feed")]
+    public async Task<IActionResult> GetFeed(Guid userId, [FromQuery] int skip, [FromQuery] int top)
+    {
+        return Ok(await postService.GetUserFeed(userId, skip, top));
+    }
+
     [HttpPost]
     [Validate]
     public async Task<IActionResult> PostUser([FromBody] AddUserDto userInsertDto)

@@ -19,15 +19,22 @@ public class PostService : IPostService
 {
     private readonly IPostRepository postRepository;
     private readonly ITripRepository tripRepository;
+    private readonly IUserFeedService userFeedService;
     private readonly IHttpContextService httpContextService;
     private readonly ISchedulerService schedulerService;
 
-    public PostService(IPostRepository postRepository, ITripRepository tripRepository, IHttpContextService httpContextService, ISchedulerService schedulerService)
+    public PostService(
+        IPostRepository postRepository, 
+        ITripRepository tripRepository, 
+        IHttpContextService httpContextService, 
+        ISchedulerService schedulerService, 
+        IUserFeedService userFeedService)
     {
         this.postRepository = postRepository;
         this.tripRepository = tripRepository;
         this.httpContextService = httpContextService;
         this.schedulerService = schedulerService;
+        this.userFeedService = userFeedService;
     }
 
     public async Task<string> SaveImage(IFormFile image, string uploadsPath)
@@ -147,6 +154,35 @@ public class PostService : IPostService
         }
 
         await postRepository.SaveChangesAsync();
+    }
+
+
+    public async Task<IEnumerable<PostDto>> GetUserFeed(Guid userId, int skip, int top)
+    {
+        var postFeedIds = await userFeedService.GetUserFeedAsync(userId);
+        if (!postFeedIds.Any() || postFeedIds.Count() < top)
+        {
+            var threshold = DateTime.UtcNow.AddDays(-30);
+            var trendingPosts = await postRepository.GetBatchAsync(
+              filter: x => x.CreatedAt > threshold && !x.OwnerId.Equals(userId),
+              orderBy: x => x.OrderByDescending(x => x.Likes.Count + x.Comments.Count).ThenByDescending(x => x.CreatedAt),
+              includeProperties: IncludeConstants.PostConstants.IncludeAll,
+              skip: skip,
+              top: top);
+
+            // await userFeedService.SetUserFeedAsync(userId, trendingPosts.Select(x => x.Id).ToList());
+
+            return trendingPosts.Select(x => x.MapToDto(userId));
+        }
+
+        var posts = await postRepository.GetBatchAsync(
+            filter: x => postFeedIds.Contains(x.Id),
+            orderBy: x => x.OrderByDescending(x => x.CreatedAt),
+            includeProperties: IncludeConstants.PostConstants.IncludeAll,
+            skip: skip,
+            top: top);
+
+        return posts.Select(x => x.MapToDto(userId));
     }
 
     private async Task ScheduleUserFeatureVectorJob(Guid userId, bool published)

@@ -210,7 +210,7 @@ public class UserService : IUserService
         JobRoutineDto jobRoutineDto = new JobRoutineDto
         {
             Repeat = !runNow,
-            CronExpression = runNow ? null : "0 2 * * *"
+            CronExpression = runNow ? null : "0 2 * * * ?"
         };
 
         var scheduleJobDto = new ScheduleJobDto
