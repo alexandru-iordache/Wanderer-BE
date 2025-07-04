@@ -31,6 +31,7 @@ public static class InfrastructureServicesExtension
         services.AddScoped<IUserService, UserService>();
         services.AddScoped<ITripService, TripService>();
         services.AddTransient<IPostService, PostService>();
+        services.AddTransient<IPlatformService, PlatformService>();
 
         services.AddTransient<IUserStatsService, UserStatsService>();
         services.AddTransient<IUserFeatureVectorInteractionService, UserFeatureVectorInteractionService>();
